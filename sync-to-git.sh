@@ -40,8 +40,8 @@ echo ""
 
 # 添加所有 Markdown 文件
 echo -e "${GREEN}添加 Markdown 文件...${NC}"
-git add "*.md"
-git add "*.MD"
+git add "*.md" 2>/dev/null || true
+git add "*.MD" 2>/dev/null || true
 
 # 检查是否有需要提交的文件
 if [ -z "$(git diff --cached --name-only)" ]; then
