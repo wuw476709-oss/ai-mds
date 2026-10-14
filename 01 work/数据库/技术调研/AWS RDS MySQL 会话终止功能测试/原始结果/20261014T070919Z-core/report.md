@@ -1,0 +1,35 @@
+# AWS RDS for MySQL session-kill probe
+
+- Run ID: `20261014T070919Z`
+- Endpoint: `database-1.ctoqyyqe8wbe.eu-north-1.rds.amazonaws.com:3306`
+- Prefix: `cskaws`
+- Raw cases: `cases.tsv`
+
+## Observations
+
+| Case | Caller | Procedure | Target | Call RC | Target RC | Target alive | Target ID | Error/output |
+|---|---|---|---|---:|---:|---|---:|---|
+| AUTH_1_MASTER | MASTER | rds_kill_query | cskaws_t1 | 0 | 0 | yes | 130 | - |
+| AUTH_2_ORDINARY | cskaws_u0 | rds_kill_query | cskaws_t1 | 1 | 143 | no | 133 | ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_u0'@'%' for routine 'mysql.rds_kill_query' |
+| AUTH_3_PROCESS | cskaws_up | rds_kill_query | cskaws_t1 | 1 | 143 | no | 133 | ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_up'@'%' for routine 'mysql.rds_kill_query' |
+| AUTH_4_EXECUTE | cskaws_ue | rds_kill_query | cskaws_t1 | 0 | 0 | yes | 141 | - |
+| AUTH_5_EXECUTE_SESSION | cskaws_ue | rds_kill | cskaws_t1 | 0 | 1 | no | 143 | - |
+| AUTH_6_ROLE_NONE | cskaws_ur | rds_kill_query | cskaws_t1 | 1 | 143 | no | 149 | ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query' |
+| AUTH_7_ROLE_ALL | cskaws_ur | rds_kill_query | cskaws_t1 | 0 | 0 | yes | 152 | - |
+| SCOPE_2_SAME_ACCOUNT | MASTER | rds_kill_query | MASTER | 0 | 0 | yes | 156 | - |
+| SCOPE_2B_SAME_SESSION | MASTER | rds_kill | MASTER | 0 | 1 | no | 160 | - |
+| SCOPE_3_CROSS_ACCOUNT | MASTER | rds_kill_query | cskaws_same | 0 | 0 | yes | 165 | - |
+| SEM_1_QUERY | MASTER | rds_kill_query | cskaws_t1 | 0 | 0 | yes | 169 | - |
+| SEM_2_SESSION | MASTER | rds_kill | cskaws_t1 | 0 | 1 | no | 172 | - |
+| PARAM_NULL | MASTER | rds_kill_query | - | 1 | - | n/a | - | ERROR 1094 (HY000) at line 1: Unknown thread id: 0 |
+| PARAM_ZERO | MASTER | rds_kill_query | - | 1 | - | n/a | - | ERROR 1094 (HY000) at line 1: Unknown thread id: 0 |
+| PARAM_NEGATIVE | MASTER | rds_kill_query | - | 1 | - | n/a | - | ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295 |
+| PARAM_DECIMAL | MASTER | rds_kill_query | - | 1 | - | n/a | - | ERROR 1094 (HY000) at line 1: Unknown thread id: 2 |
+| PARAM_TEXT | MASTER | rds_kill_query | - | 1 | - | n/a | - | ERROR 1094 (HY000) at line 1: Unknown thread id: 0 |
+| PARAM_OVERFLOW | MASTER | rds_kill_query | - | 1 | - | n/a | - | ERROR 1094 (HY000) at line 1: Unknown thread id: 0 |
+| LIFE_2_REVOKE | cskaws_ue | rds_kill_query | cskaws_t1 | 1 | 143 | no | 183 | ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ue'@'%' for routine 'mysql.rds_kill_query' |
+| LIFE_4_ROLE_REVOKE | cskaws_ur | rds_kill_query | cskaws_t1 | 1 | 143 | no | 187 | ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query' |
+
+## Interpretation status
+
+This file is an automatically collected evidence summary. 

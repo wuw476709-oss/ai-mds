@@ -1,0 +1,1 @@
+ERROR 1044 (42000) at line 1: Access denied for user 'cskaws_g1'@'%' to database 'mysql'

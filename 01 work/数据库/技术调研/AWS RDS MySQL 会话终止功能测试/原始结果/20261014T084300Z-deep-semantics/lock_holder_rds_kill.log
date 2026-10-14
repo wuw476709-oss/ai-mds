@@ -1,0 +1,5 @@
+READY_lock_holder_rds_kill	864	cskaws_dt@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_dt@%	NONE
+HOLDER_LOCKED_rds_kill
+BEGIN_HOLDER_AFTER_rds_kill
+HOLDER_STILL_ALIVE
+END_HOLDER_AFTER_rds_kill

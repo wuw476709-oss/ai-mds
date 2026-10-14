@@ -1,0 +1,3 @@
+Grants for cskaws_g2@%
+GRANT USAGE ON *.* TO `cskaws_g2`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill_query` TO `cskaws_g2`@`%` WITH GRANT OPTION

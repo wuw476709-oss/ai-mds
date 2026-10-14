@@ -1,0 +1,5 @@
+relative_path	line	message
+call_with_global_execute.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+recipient_call_after_regrant.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+recipient_cannot_delegate.log	1	ERROR 1045 (28000) at line 1: Access denied for user 'cskaws_u0'@'%' (using password: YES)
+regrant_without_grant_option.log	1	ERROR 1045 (28000) at line 1: Access denied for user 'cskaws_ue'@'%' (using password: YES)

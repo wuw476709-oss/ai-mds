@@ -1,0 +1,75 @@
+
+===== BEGIN GRANTS_cskaws_r1.log =====
+Grants for cskaws_r1@%
+GRANT USAGE ON *.* TO `cskaws_r1`@`%`
+
+===== END GRANTS_cskaws_r1.log =====
+
+===== BEGIN GRANTS_cskaws_r2.log =====
+Grants for cskaws_r2@%
+GRANT USAGE ON *.* TO `cskaws_r2`@`%`
+GRANT `rds_superuser_role`@`%` TO `cskaws_r2`@`%` WITH ADMIN OPTION
+
+===== END GRANTS_cskaws_r2.log =====
+
+===== BEGIN GRANTS_cskaws_r3.log =====
+Grants for cskaws_r3@%
+GRANT USAGE ON *.* TO `cskaws_r3`@`%`
+GRANT `rds_superuser_role`@`%` TO `cskaws_r3`@`%`
+
+===== END GRANTS_cskaws_r3.log =====
+
+===== BEGIN ROLE_CHAIN_R1_R2.log =====
+
+===== END ROLE_CHAIN_R1_R2.log =====
+
+===== BEGIN ROLE_CHAIN_R2_R3.log =====
+
+===== END ROLE_CHAIN_R2_R3.log =====
+
+===== BEGIN ROLE_GRANT_NO_ADMIN.log =====
+
+===== END ROLE_GRANT_NO_ADMIN.log =====
+
+===== BEGIN ROLE_GRANT_WITH_ADMIN.log =====
+
+===== END ROLE_GRANT_WITH_ADMIN.log =====
+
+===== BEGIN ROLE_R3_AFTER_UPSTREAM_REVOKE.log =====
+CURRENT_ROLE()
+`rds_superuser_role`@`%`
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END ROLE_R3_AFTER_UPSTREAM_REVOKE.log =====
+
+===== BEGIN ROLE_R3_CALL.log =====
+CURRENT_ROLE()
+`rds_superuser_role`@`%`
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END ROLE_R3_CALL.log =====
+
+===== BEGIN ROLE_REGRANT_NO_ADMIN.log =====
+ERROR 1227 (42000) at line 1: Access denied; you need (at least one of) the WITH ADMIN, ROLE_ADMIN, SUPER privilege(s) for this operation
+
+===== END ROLE_REGRANT_NO_ADMIN.log =====
+
+===== BEGIN ROLE_REVOKE_UPSTREAM.log =====
+
+===== END ROLE_REVOKE_UPSTREAM.log =====
+
+===== BEGIN status.tsv =====
+case_id	rc
+ROLE_GRANT_NO_ADMIN	0
+ROLE_REGRANT_NO_ADMIN	1
+ROLE_GRANT_WITH_ADMIN	0
+ROLE_CHAIN_R1_R2	0
+ROLE_CHAIN_R2_R3	0
+ROLE_R3_CALL	1
+ROLE_REVOKE_UPSTREAM	0
+ROLE_R3_AFTER_UPSTREAM_REVOKE	1
+GRANTS_cskaws_r1	0
+GRANTS_cskaws_r2	0
+GRANTS_cskaws_r3	0
+
+===== END status.tsv =====

@@ -1,0 +1,12 @@
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/GRANTS_cskaws_r1.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/GRANTS_cskaws_r2.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/GRANTS_cskaws_r3.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_CHAIN_R1_R2.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_CHAIN_R2_R3.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_GRANT_NO_ADMIN.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_GRANT_WITH_ADMIN.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_R3_AFTER_UPSTREAM_REVOKE.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_R3_CALL.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_REGRANT_NO_ADMIN.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/ROLE_REVOKE_UPSTREAM.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084157Z-role-delegation/status.tsv

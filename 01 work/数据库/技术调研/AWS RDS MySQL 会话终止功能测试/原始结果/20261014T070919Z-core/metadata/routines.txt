@@ -1,0 +1,2 @@
+mysql	rds_kill	PROCEDURE	rdsadmin@localhost	DEFINER	CONTAINS SQL	
+mysql	rds_kill_query	PROCEDURE	rdsadmin@localhost	DEFINER	CONTAINS SQL	

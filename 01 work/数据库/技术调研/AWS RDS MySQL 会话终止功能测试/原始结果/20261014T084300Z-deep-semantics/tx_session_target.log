@@ -1,0 +1,3 @@
+READY_tx_session_target	854	cskaws_dt@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_dt@%	NONE
+TXS_LOCKED
+ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query

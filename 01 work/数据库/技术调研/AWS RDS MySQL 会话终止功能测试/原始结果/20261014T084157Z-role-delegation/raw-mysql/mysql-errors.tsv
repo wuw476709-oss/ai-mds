@@ -1,0 +1,4 @@
+relative_path	line	message
+ROLE_R3_AFTER_UPSTREAM_REVOKE.log	3	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+ROLE_R3_CALL.log	3	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+ROLE_REGRANT_NO_ADMIN.log	1	ERROR 1227 (42000) at line 1: Access denied; you need (at least one of) the WITH ADMIN, ROLE_ADMIN, SUPER privilege(s) for this operation

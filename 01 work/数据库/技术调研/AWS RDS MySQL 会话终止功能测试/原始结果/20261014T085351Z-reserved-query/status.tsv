@@ -1,0 +1,6 @@
+case_id	rc
+reserved_users	0
+reserved_processes_before	0
+rds_kill_query_reserved	1
+reserved_target_after_query	0
+reserved_processes_after	0

@@ -1,0 +1,26 @@
+relative_path	line	message
+AUTH_2_ORDINARY.call.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_u0'@'%' for routine 'mysql.rds_kill_query'
+AUTH_3_PROCESS.call.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_up'@'%' for routine 'mysql.rds_kill_query'
+AUTH_6_ROLE_NONE.call.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+LIFE_2_REVOKE.call.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ue'@'%' for routine 'mysql.rds_kill_query'
+LIFE_4_ROLE_REVOKE.call.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+PARAM_DECIMAL.call.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+PARAM_NEGATIVE.call.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+PARAM_NULL.call.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_OVERFLOW.call.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_TEXT.call.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_ZERO.call.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+cases.tsv	3	AUTH_2_ORDINARY cskaws_u0 rds_kill_query cskaws_t1 1 143 no 133 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_u0'@'%' for routine 'mysql.rds_kill_query'
+cases.tsv	4	AUTH_3_PROCESS cskaws_up rds_kill_query cskaws_t1 1 143 no 133 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_up'@'%' for routine 'mysql.rds_kill_query'
+cases.tsv	7	AUTH_6_ROLE_NONE cskaws_ur rds_kill_query cskaws_t1 1 143 no 149 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+cases.tsv	14	PARAM_NULL MASTER rds_kill_query - 1 - n/a - ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+cases.tsv	15	PARAM_ZERO MASTER rds_kill_query - 1 - n/a - ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+cases.tsv	16	PARAM_NEGATIVE MASTER rds_kill_query - 1 - n/a - ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+cases.tsv	17	PARAM_DECIMAL MASTER rds_kill_query - 1 - n/a - ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+cases.tsv	18	PARAM_TEXT MASTER rds_kill_query - 1 - n/a - ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+cases.tsv	19	PARAM_OVERFLOW MASTER rds_kill_query - 1 - n/a - ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+cases.tsv	20	LIFE_2_REVOKE cskaws_ue rds_kill_query cskaws_t1 1 143 no 183 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ue'@'%' for routine 'mysql.rds_kill_query'
+cases.tsv	21	LIFE_4_ROLE_REVOKE cskaws_ur rds_kill_query cskaws_t1 1 143 no 187 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+targets/AUTH_5_EXECUTE_SESSION.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+targets/SCOPE_2B_SAME_SESSION.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+targets/SEM_2_SESSION.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query

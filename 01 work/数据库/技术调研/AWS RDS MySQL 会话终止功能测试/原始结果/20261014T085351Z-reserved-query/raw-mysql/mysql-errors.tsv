@@ -1,0 +1,2 @@
+relative_path	line	message
+rds_kill_query_reserved.log	1	ERROR 1644 (45000) at line 1: CANNOT KILL RDSADMIN SESSION

@@ -1,0 +1,204 @@
+
+===== BEGIN baseline_grants_grantor.log =====
+Grants for cskaws_ue@%
+GRANT USAGE ON *.* TO `cskaws_ue`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill` TO `cskaws_ue`@`%`
+
+===== END baseline_grants_grantor.log =====
+
+===== BEGIN baseline_grants_recipient.log =====
+Grants for cskaws_u0@%
+GRANT USAGE ON *.* TO `cskaws_u0`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_u0`@`%`
+
+===== END baseline_grants_recipient.log =====
+
+===== BEGIN call_with_global_execute.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END call_with_global_execute.log =====
+
+===== BEGIN cleanup.log =====
+
+===== END cleanup.log =====
+
+===== BEGIN create_rds_kill.log =====
+Procedure	sql_mode	Create Procedure	character_set_client	collation_connection	Database Collation
+rds_kill	NO_ENGINE_SUBSTITUTION	CREATE DEFINER=`rdsadmin`@`localhost` PROCEDURE `rds_kill`(IN thread BIGINT)
+BEGIN
+  DECLARE l_user TEXT;
+  DECLARE l_host TEXT;
+  DECLARE rsv_user TEXT;
+  DECLARE rsv_host TEXT;
+  
+  SELECT user, host INTO l_user, l_host
+  FROM information_schema.processlist
+  WHERE id = thread;
+  
+  SELECT MAX(user), MAX(host) INTO rsv_user, rsv_host
+  FROM mysql.rds_reserved_users
+  WHERE user = l_user;
+  IF CONNECTION_ID() = thread THEN
+    
+    
+    DO NULL;
+  ELSEIF (rsv_user IS NOT NULL AND (l_host = rsv_host OR rsv_host = '%')) THEN
+    
+    SET @err_msg = CONCAT('CANNOT KILL ', UPPER(l_user), ' SESSION');
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @err_msg;
+  END IF;
+  KILL thread;
+END	utf8mb4	utf8mb4_0900_ai_ci	utf8mb4_0900_ai_ci
+
+===== END create_rds_kill.log =====
+
+===== BEGIN create_rds_kill_query.log =====
+Procedure	sql_mode	Create Procedure	character_set_client	collation_connection	Database Collation
+rds_kill_query	NO_ENGINE_SUBSTITUTION	CREATE DEFINER=`rdsadmin`@`localhost` PROCEDURE `rds_kill_query`(IN thread BIGINT)
+BEGIN
+  DECLARE l_user TEXT;
+  DECLARE l_host TEXT;
+  DECLARE rsv_user TEXT;
+  DECLARE rsv_host TEXT;
+  
+  SELECT user, host INTO l_user, l_host
+  FROM information_schema.processlist
+  WHERE id = thread;
+  
+  SELECT MAX(user), MAX(host) INTO rsv_user, rsv_host
+  FROM mysql.rds_reserved_users
+  WHERE user = l_user;
+  IF CONNECTION_ID() = thread THEN
+    
+    
+    DO NULL;
+  ELSEIF (rsv_user IS NOT NULL AND (l_host = rsv_host OR rsv_host = '%')) THEN
+    
+    SET @err_msg = CONCAT('CANNOT KILL ', UPPER(l_user), ' SESSION');
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @err_msg;
+  END IF;
+  KILL QUERY thread;
+END	utf8mb4	utf8mb4_0900_ai_ci	utf8mb4_0900_ai_ci
+
+===== END create_rds_kill_query.log =====
+
+===== BEGIN final_grants_downstream.log =====
+Grants for cskaws_same@%
+GRANT USAGE ON *.* TO `cskaws_same`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_same`@`%`
+
+===== END final_grants_downstream.log =====
+
+===== BEGIN final_grants_grantor.log =====
+Grants for cskaws_ue@%
+GRANT USAGE ON *.* TO `cskaws_ue`@`%` WITH GRANT OPTION
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill` TO `cskaws_ue`@`%`
+
+===== END final_grants_grantor.log =====
+
+===== BEGIN final_grants_recipient.log =====
+Grants for cskaws_u0@%
+GRANT USAGE ON *.* TO `cskaws_u0`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_u0`@`%`
+
+===== END final_grants_recipient.log =====
+
+===== BEGIN grant_global_execute_with_grant_option.log =====
+
+===== END grant_global_execute_with_grant_option.log =====
+
+===== BEGIN grant_global_execute_without_grant_option.log =====
+
+===== END grant_global_execute_without_grant_option.log =====
+
+===== BEGIN grants_with_grant_option.log =====
+Grants for cskaws_ue@%
+GRANT EXECUTE ON *.* TO `cskaws_ue`@`%` WITH GRANT OPTION
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill` TO `cskaws_ue`@`%`
+
+===== END grants_with_grant_option.log =====
+
+===== BEGIN grants_without_grant_option.log =====
+Grants for cskaws_ue@%
+GRANT EXECUTE ON *.* TO `cskaws_ue`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill` TO `cskaws_ue`@`%`
+
+===== END grants_without_grant_option.log =====
+
+===== BEGIN recipient_after_failed_regrant.log =====
+Grants for cskaws_u0@%
+GRANT USAGE ON *.* TO `cskaws_u0`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_u0`@`%`
+
+===== END recipient_after_failed_regrant.log =====
+
+===== BEGIN recipient_after_successful_regrant.log =====
+Grants for cskaws_u0@%
+GRANT EXECUTE ON *.* TO `cskaws_u0`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_u0`@`%`
+
+===== END recipient_after_successful_regrant.log =====
+
+===== BEGIN recipient_call_after_regrant.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END recipient_call_after_regrant.log =====
+
+===== BEGIN recipient_cannot_delegate.log =====
+ERROR 1045 (28000) at line 1: Access denied for user 'cskaws_u0'@'%' (using password: YES)
+
+===== END recipient_cannot_delegate.log =====
+
+===== BEGIN regrant_with_grant_option.log =====
+
+===== END regrant_with_grant_option.log =====
+
+===== BEGIN regrant_without_grant_option.log =====
+ERROR 1045 (28000) at line 1: Access denied for user 'cskaws_ue'@'%' (using password: YES)
+
+===== END regrant_without_grant_option.log =====
+
+===== BEGIN reserved_processes.log =====
+ID	USER	HOST	COMMAND	STATE	reserved_user	reserved_host
+13	rdsadmin	localhost	Sleep		rdsadmin	localhost
+25	rdsadmin	localhost	Sleep		rdsadmin	localhost
+
+===== END reserved_processes.log =====
+
+===== BEGIN reserved_users.log =====
+user	host	description
+mysql.infoschema	localhost	MySQL reserved system account (https://dev.mysql.com/doc/refman/8.0/en/reserved-accounts.html)
+mysql.session	localhost	MySQL reserved system account (https://dev.mysql.com/doc/refman/8.0/en/reserved-accounts.html)
+mysql.sys	localhost	MySQL reserved system account (https://dev.mysql.com/doc/refman/8.0/en/reserved-accounts.html)
+rdsadmin	localhost	RDS management user
+
+===== END reserved_users.log =====
+
+===== BEGIN status.tsv =====
+case	rc
+baseline_grants_grantor	0
+baseline_grants_recipient	0
+grant_global_execute_without_grant_option	0
+grants_without_grant_option	0
+call_with_global_execute	1
+regrant_without_grant_option	1
+recipient_after_failed_regrant	0
+grant_global_execute_with_grant_option	0
+grants_with_grant_option	0
+regrant_with_grant_option	0
+recipient_after_successful_regrant	0
+recipient_call_after_regrant	1
+recipient_cannot_delegate	1
+reserved_users	0
+reserved_processes	0
+create_rds_kill	0
+create_rds_kill_query	0
+final_grants_grantor	0
+final_grants_recipient	0
+final_grants_downstream	0
+
+===== END status.tsv =====

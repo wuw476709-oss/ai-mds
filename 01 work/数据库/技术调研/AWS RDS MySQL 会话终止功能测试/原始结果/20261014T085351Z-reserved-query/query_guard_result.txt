@@ -1,0 +1,1 @@
+PASS: query procedure rejected the reserved target

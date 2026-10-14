@@ -1,0 +1,387 @@
+
+===== BEGIN AUTH_1_MASTER.call.log =====
+
+===== END AUTH_1_MASTER.call.log =====
+
+===== BEGIN AUTH_2_ORDINARY.call.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_u0'@'%' for routine 'mysql.rds_kill_query'
+
+===== END AUTH_2_ORDINARY.call.log =====
+
+===== BEGIN AUTH_3_PROCESS.call.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_up'@'%' for routine 'mysql.rds_kill_query'
+
+===== END AUTH_3_PROCESS.call.log =====
+
+===== BEGIN AUTH_4_EXECUTE.call.log =====
+
+===== END AUTH_4_EXECUTE.call.log =====
+
+===== BEGIN AUTH_5_EXECUTE_SESSION.call.log =====
+
+===== END AUTH_5_EXECUTE_SESSION.call.log =====
+
+===== BEGIN AUTH_6_ROLE_NONE.call.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+
+===== END AUTH_6_ROLE_NONE.call.log =====
+
+===== BEGIN AUTH_7_ROLE_ALL.call.log =====
+
+===== END AUTH_7_ROLE_ALL.call.log =====
+
+===== BEGIN LIFE_2_REVOKE.call.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ue'@'%' for routine 'mysql.rds_kill_query'
+
+===== END LIFE_2_REVOKE.call.log =====
+
+===== BEGIN LIFE_4_ROLE_REVOKE.call.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+
+===== END LIFE_4_ROLE_REVOKE.call.log =====
+
+===== BEGIN PARAM_DECIMAL.call.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+
+===== END PARAM_DECIMAL.call.log =====
+
+===== BEGIN PARAM_NEGATIVE.call.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+
+===== END PARAM_NEGATIVE.call.log =====
+
+===== BEGIN PARAM_NULL.call.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END PARAM_NULL.call.log =====
+
+===== BEGIN PARAM_OVERFLOW.call.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END PARAM_OVERFLOW.call.log =====
+
+===== BEGIN PARAM_TEXT.call.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END PARAM_TEXT.call.log =====
+
+===== BEGIN PARAM_ZERO.call.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END PARAM_ZERO.call.log =====
+
+===== BEGIN SCOPE_2B_SAME_SESSION.call.log =====
+
+===== END SCOPE_2B_SAME_SESSION.call.log =====
+
+===== BEGIN SCOPE_2_SAME_ACCOUNT.call.log =====
+
+===== END SCOPE_2_SAME_ACCOUNT.call.log =====
+
+===== BEGIN SCOPE_3_CROSS_ACCOUNT.call.log =====
+
+===== END SCOPE_3_CROSS_ACCOUNT.call.log =====
+
+===== BEGIN SEM_1_QUERY.call.log =====
+
+===== END SEM_1_QUERY.call.log =====
+
+===== BEGIN SEM_2_SESSION.call.log =====
+
+===== END SEM_2_SESSION.call.log =====
+
+===== BEGIN cases.tsv =====
+case_id	caller	procedure	target_user	call_rc	target_rc	target_alive	target_id	error
+AUTH_1_MASTER	MASTER	rds_kill_query	cskaws_t1	0	0	yes	130	-
+AUTH_2_ORDINARY	cskaws_u0	rds_kill_query	cskaws_t1	1	143	no	133	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_u0'@'%' for routine 'mysql.rds_kill_query'
+AUTH_3_PROCESS	cskaws_up	rds_kill_query	cskaws_t1	1	143	no	133	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_up'@'%' for routine 'mysql.rds_kill_query'
+AUTH_4_EXECUTE	cskaws_ue	rds_kill_query	cskaws_t1	0	0	yes	141	-
+AUTH_5_EXECUTE_SESSION	cskaws_ue	rds_kill	cskaws_t1	0	1	no	143	-
+AUTH_6_ROLE_NONE	cskaws_ur	rds_kill_query	cskaws_t1	1	143	no	149	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+AUTH_7_ROLE_ALL	cskaws_ur	rds_kill_query	cskaws_t1	0	0	yes	152	-
+SCOPE_2_SAME_ACCOUNT	MASTER	rds_kill_query	MASTER	0	0	yes	156	-
+SCOPE_2B_SAME_SESSION	MASTER	rds_kill	MASTER	0	1	no	160	-
+SCOPE_3_CROSS_ACCOUNT	MASTER	rds_kill_query	cskaws_same	0	0	yes	165	-
+SEM_1_QUERY	MASTER	rds_kill_query	cskaws_t1	0	0	yes	169	-
+SEM_2_SESSION	MASTER	rds_kill	cskaws_t1	0	1	no	172	-
+PARAM_NULL	MASTER	rds_kill_query	-	1	-	n/a	-	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_ZERO	MASTER	rds_kill_query	-	1	-	n/a	-	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_NEGATIVE	MASTER	rds_kill_query	-	1	-	n/a	-	ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+PARAM_DECIMAL	MASTER	rds_kill_query	-	1	-	n/a	-	ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+PARAM_TEXT	MASTER	rds_kill_query	-	1	-	n/a	-	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_OVERFLOW	MASTER	rds_kill_query	-	1	-	n/a	-	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+LIFE_2_REVOKE	cskaws_ue	rds_kill_query	cskaws_t1	1	143	no	183	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ue'@'%' for routine 'mysql.rds_kill_query'
+LIFE_4_ROLE_REVOKE	cskaws_ur	rds_kill_query	cskaws_t1	1	143	no	187	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_ur'@'%' for routine 'mysql.rds_kill_query'
+
+===== END cases.tsv =====
+
+===== BEGIN events.log =====
+2026-10-14T07:09:19Z Checking connectivity and capturing baseline
+2026-10-14T07:09:43Z Creating disposable users
+2026-10-14T07:10:19Z Running AUTH_1_MASTER caller=MASTER procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:24Z Running AUTH_2_ORDINARY caller=cskaws_u0 procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:31Z Running AUTH_3_PROCESS caller=cskaws_up procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:35Z Running AUTH_4_EXECUTE caller=cskaws_ue procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:41Z Running AUTH_5_EXECUTE_SESSION caller=cskaws_ue procedure=rds_kill target=cskaws_t1
+2026-10-14T07:10:48Z Running AUTH_6_ROLE_NONE caller=cskaws_ur procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:56Z Running AUTH_7_ROLE_ALL caller=cskaws_ur procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:11:08Z Running SCOPE_2_SAME_ACCOUNT caller=MASTER procedure=rds_kill_query target=MASTER
+2026-10-14T07:11:18Z Running SCOPE_2B_SAME_SESSION caller=MASTER procedure=rds_kill target=MASTER
+2026-10-14T07:11:25Z Running SCOPE_3_CROSS_ACCOUNT caller=MASTER procedure=rds_kill_query target=cskaws_same
+2026-10-14T07:11:33Z Running SEM_1_QUERY caller=MASTER procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:11:39Z Running SEM_2_SESSION caller=MASTER procedure=rds_kill target=cskaws_t1
+2026-10-14T07:11:44Z Running PARAM_NULL caller=MASTER procedure=rds_kill_query argument=NULL
+2026-10-14T07:11:46Z Running PARAM_ZERO caller=MASTER procedure=rds_kill_query argument=0
+2026-10-14T07:11:50Z Running PARAM_NEGATIVE caller=MASTER procedure=rds_kill_query argument=-1
+2026-10-14T07:11:53Z Running PARAM_DECIMAL caller=MASTER procedure=rds_kill_query argument=1.5
+2026-10-14T07:11:56Z Running PARAM_TEXT caller=MASTER procedure=rds_kill_query argument='not-a-thread-id'
+2026-10-14T07:11:58Z Running PARAM_OVERFLOW caller=MASTER procedure=rds_kill_query argument=4294967296
+2026-10-14T07:12:03Z Running LIFE_2_REVOKE caller=cskaws_ue procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:12:16Z Running LIFE_4_ROLE_REVOKE caller=cskaws_ur procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:12:25Z Evidence collected in /Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T070919Z
+
+===== END events.log =====
+
+===== BEGIN metadata/create_rds_kill.txt =====
+rds_kill	NO_ENGINE_SUBSTITUTION	CREATE DEFINER=`rdsadmin`@`localhost` PROCEDURE `rds_kill`(IN thread BIGINT)
+BEGIN
+  DECLARE l_user TEXT;
+  DECLARE l_host TEXT;
+  DECLARE rsv_user TEXT;
+  DECLARE rsv_host TEXT;
+  
+  SELECT user, host INTO l_user, l_host
+  FROM information_schema.processlist
+  WHERE id = thread;
+  
+  SELECT MAX(user), MAX(host) INTO rsv_user, rsv_host
+  FROM mysql.rds_reserved_users
+  WHERE user = l_user;
+  IF CONNECTION_ID() = thread THEN
+    
+    
+    DO NULL;
+  ELSEIF (rsv_user IS NOT NULL AND (l_host = rsv_host OR rsv_host = '%')) THEN
+    
+    SET @err_msg = CONCAT('CANNOT KILL ', UPPER(l_user), ' SESSION');
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @err_msg;
+  END IF;
+  KILL thread;
+END	utf8mb4	utf8mb4_0900_ai_ci	utf8mb4_0900_ai_ci
+
+===== END metadata/create_rds_kill.txt =====
+
+===== BEGIN metadata/create_rds_kill_query.txt =====
+rds_kill_query	NO_ENGINE_SUBSTITUTION	CREATE DEFINER=`rdsadmin`@`localhost` PROCEDURE `rds_kill_query`(IN thread BIGINT)
+BEGIN
+  DECLARE l_user TEXT;
+  DECLARE l_host TEXT;
+  DECLARE rsv_user TEXT;
+  DECLARE rsv_host TEXT;
+  
+  SELECT user, host INTO l_user, l_host
+  FROM information_schema.processlist
+  WHERE id = thread;
+  
+  SELECT MAX(user), MAX(host) INTO rsv_user, rsv_host
+  FROM mysql.rds_reserved_users
+  WHERE user = l_user;
+  IF CONNECTION_ID() = thread THEN
+    
+    
+    DO NULL;
+  ELSEIF (rsv_user IS NOT NULL AND (l_host = rsv_host OR rsv_host = '%')) THEN
+    
+    SET @err_msg = CONCAT('CANNOT KILL ', UPPER(l_user), ' SESSION');
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = @err_msg;
+  END IF;
+  KILL QUERY thread;
+END	utf8mb4	utf8mb4_0900_ai_ci	utf8mb4_0900_ai_ci
+
+===== END metadata/create_rds_kill_query.txt =====
+
+===== BEGIN metadata/grant_execute_kill.txt =====
+
+===== END metadata/grant_execute_kill.txt =====
+
+===== BEGIN metadata/grant_execute_query.txt =====
+
+===== END metadata/grant_execute_query.txt =====
+
+===== BEGIN metadata/grant_process.txt =====
+
+===== END metadata/grant_process.txt =====
+
+===== BEGIN metadata/grant_rds_role.txt =====
+
+===== END metadata/grant_rds_role.txt =====
+
+===== BEGIN metadata/grants_cskaws_u0.txt =====
+cskaws_u0@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_u0@%	NONE
+GRANT USAGE ON *.* TO `cskaws_u0`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_u0`@`%`
+
+===== END metadata/grants_cskaws_u0.txt =====
+
+===== BEGIN metadata/grants_cskaws_ue.txt =====
+cskaws_ue@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_ue@%	NONE
+GRANT USAGE ON *.* TO `cskaws_ue`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill_query` TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill` TO `cskaws_ue`@`%`
+
+===== END metadata/grants_cskaws_ue.txt =====
+
+===== BEGIN metadata/grants_cskaws_up.txt =====
+cskaws_up@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_up@%	NONE
+GRANT PROCESS ON *.* TO `cskaws_up`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_up`@`%`
+
+===== END metadata/grants_cskaws_up.txt =====
+
+===== BEGIN metadata/grants_cskaws_ur.txt =====
+cskaws_ur@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_ur@%	NONE
+GRANT USAGE ON *.* TO `cskaws_ur`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ur`@`%`
+GRANT `rds_superuser_role`@`%` TO `cskaws_ur`@`%`
+
+===== END metadata/grants_cskaws_ur.txt =====
+
+===== BEGIN metadata/identity.txt =====
+admin@ecs-124-70-231-10.compute.hwclouds-dns.com	admin@%	`rds_superuser_role`@`%`	115
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER, CREATE ROLE, DROP ROLE ON *.* TO `admin`@`%` WITH GRANT OPTION
+GRANT APPLICATION_PASSWORD_ADMIN,FLUSH_OPTIMIZER_COSTS,FLUSH_STATUS,FLUSH_TABLES,FLUSH_USER_RESOURCES,ROLE_ADMIN,SENSITIVE_VARIABLES_OBSERVER,SESSION_VARIABLES_ADMIN,SET_USER_ID,SHOW_ROUTINE,XA_RECOVER_ADMIN ON *.* TO `admin`@`%` WITH GRANT OPTION
+GRANT `rds_superuser_role`@`%` TO `admin`@`%`
+
+===== END metadata/identity.txt =====
+
+===== BEGIN metadata/instance.txt =====
+8.0.45	Source distribution	ip-10-11-1-249
+
+===== END metadata/instance.txt =====
+
+===== BEGIN metadata/revoke_execute_query.txt =====
+
+===== END metadata/revoke_execute_query.txt =====
+
+===== BEGIN metadata/revoke_rds_role.txt =====
+
+===== END metadata/revoke_rds_role.txt =====
+
+===== BEGIN metadata/routine_grants.txt =====
+
+===== END metadata/routine_grants.txt =====
+
+===== BEGIN metadata/routines.txt =====
+mysql	rds_kill	PROCEDURE	rdsadmin@localhost	DEFINER	CONTAINS SQL	
+mysql	rds_kill_query	PROCEDURE	rdsadmin@localhost	DEFINER	CONTAINS SQL	
+
+===== END metadata/routines.txt =====
+
+===== BEGIN metadata/status.tsv =====
+name	rc
+instance	0
+identity	0
+routines	0
+create_rds_kill	0
+create_rds_kill_query	0
+routine_grants	0
+superuser_role	0
+grant_process	0
+grant_execute_kill	0
+grant_execute_query	0
+grant_rds_role	0
+grants_cskaws_u0	0
+grants_cskaws_ue	0
+grants_cskaws_up	0
+grants_cskaws_ur	0
+revoke_execute_query	0
+revoke_rds_role	0
+
+===== END metadata/status.tsv =====
+
+===== BEGIN metadata/superuser_role.txt =====
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER, CREATE ROLE, DROP ROLE ON *.* TO `rds_superuser_role`@`%` WITH GRANT OPTION
+GRANT APPLICATION_PASSWORD_ADMIN,FLUSH_OPTIMIZER_COSTS,FLUSH_STATUS,FLUSH_TABLES,FLUSH_USER_RESOURCES,ROLE_ADMIN,SENSITIVE_VARIABLES_OBSERVER,SESSION_VARIABLES_ADMIN,SET_USER_ID,SHOW_ROUTINE,XA_RECOVER_ADMIN ON *.* TO `rds_superuser_role`@`%` WITH GRANT OPTION
+
+===== END metadata/superuser_role.txt =====
+
+===== BEGIN targets/AUTH_1_MASTER.log =====
+130
+1
+target_connection_alive
+
+===== END targets/AUTH_1_MASTER.log =====
+
+===== BEGIN targets/AUTH_2_ORDINARY.log =====
+
+===== END targets/AUTH_2_ORDINARY.log =====
+
+===== BEGIN targets/AUTH_3_PROCESS.log =====
+
+===== END targets/AUTH_3_PROCESS.log =====
+
+===== BEGIN targets/AUTH_4_EXECUTE.log =====
+141
+1
+target_connection_alive
+
+===== END targets/AUTH_4_EXECUTE.log =====
+
+===== BEGIN targets/AUTH_5_EXECUTE_SESSION.log =====
+143
+ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+
+===== END targets/AUTH_5_EXECUTE_SESSION.log =====
+
+===== BEGIN targets/AUTH_6_ROLE_NONE.log =====
+
+===== END targets/AUTH_6_ROLE_NONE.log =====
+
+===== BEGIN targets/AUTH_7_ROLE_ALL.log =====
+152
+1
+target_connection_alive
+
+===== END targets/AUTH_7_ROLE_ALL.log =====
+
+===== BEGIN targets/LIFE_2_REVOKE.log =====
+
+===== END targets/LIFE_2_REVOKE.log =====
+
+===== BEGIN targets/LIFE_4_ROLE_REVOKE.log =====
+
+===== END targets/LIFE_4_ROLE_REVOKE.log =====
+
+===== BEGIN targets/SCOPE_2B_SAME_SESSION.log =====
+160
+ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+
+===== END targets/SCOPE_2B_SAME_SESSION.log =====
+
+===== BEGIN targets/SCOPE_2_SAME_ACCOUNT.log =====
+156
+1
+target_connection_alive
+
+===== END targets/SCOPE_2_SAME_ACCOUNT.log =====
+
+===== BEGIN targets/SCOPE_3_CROSS_ACCOUNT.log =====
+165
+1
+target_connection_alive
+
+===== END targets/SCOPE_3_CROSS_ACCOUNT.log =====
+
+===== BEGIN targets/SEM_1_QUERY.log =====
+169
+1
+target_connection_alive
+
+===== END targets/SEM_1_QUERY.log =====
+
+===== BEGIN targets/SEM_2_SESSION.log =====
+172
+ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+
+===== END targets/SEM_2_SESSION.log =====

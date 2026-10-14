@@ -1,0 +1,14 @@
+relative_path	line	message
+DATABASE_CALL_QUERY.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+DATABASE_CALL_SESSION.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+DATABASE_DOWNSTREAM_AFTER_REVOKE.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+DATABASE_REGRANT_NO_GO.log	1	ERROR 1044 (42000) at line 1: Access denied for user 'cskaws_g1'@'%' to database 'mysql'
+GLOBAL_CALL_QUERY.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+GLOBAL_CALL_SESSION.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+GLOBAL_DOWNSTREAM_AFTER_REVOKE.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+GLOBAL_REGRANT_NO_GO.log	1	ERROR 1045 (28000) at line 1: Access denied for user 'cskaws_g1'@'%' (using password: YES)
+PROCEDURE_ALLOWED_QUERY.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PROCEDURE_DENIED_SESSION.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_g1'@'%' for routine 'mysql.rds_kill'
+PROCEDURE_DOWNSTREAM_AFTER_REVOKE.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PROCEDURE_DOWNSTREAM_OTHER_DENIED.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_g3'@'%' for routine 'mysql.rds_kill'
+PROCEDURE_REGRANT_NO_GO.log	1	ERROR 1370 (42000) at line 1: grant command denied to user 'cskaws_g1'@'%' for routine 'mysql.rds_kill_query'

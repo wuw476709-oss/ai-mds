@@ -1,0 +1,3 @@
+cskaws_up@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_up@%	NONE
+GRANT PROCESS ON *.* TO `cskaws_up`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_up`@`%`

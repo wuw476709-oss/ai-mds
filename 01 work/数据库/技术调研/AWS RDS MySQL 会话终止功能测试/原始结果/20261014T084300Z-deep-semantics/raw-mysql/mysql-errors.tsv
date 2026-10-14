@@ -1,0 +1,110 @@
+relative_path	line	message
+AUTH_EXECUTE_QUERY.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+AUTH_EXECUTE_SESSION.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+AUTH_ORDINARY_QUERY.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+AUTH_ORDINARY_SESSION.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill'
+AUTH_PROCESS_QUERY.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dp'@'%' for routine 'mysql.rds_kill_query'
+AUTH_PROCESS_SESSION.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dp'@'%' for routine 'mysql.rds_kill'
+AUTH_ROLE_ACTIVE_QUERY.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+AUTH_ROLE_ACTIVE_SESSION.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+AUTH_ROLE_NONE_QUERY.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query'
+AUTH_ROLE_NONE_SESSION.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill'
+LIFE_EXEC_NEW_CONNECTION.log	1	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+LIFE_ROLE_NEW_CONNECTION.log	2	ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query'
+NATIVE_EXECUTE_QUERY.log	1	ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+NATIVE_MASTER_CONNECTION.log	1	ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+NATIVE_MASTER_QUERY.log	1	ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+NATIVE_PROCESS_QUERY.log	1	ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+NATIVE_U0_QUERY.log	1	ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+PARAM_rds_kill_1.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_10.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_11.log	1	ERROR 1317 (70100) at line 1: Query execution was interrupted
+PARAM_rds_kill_2.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_3.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+PARAM_rds_kill_4.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+PARAM_rds_kill_5.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+PARAM_rds_kill_6.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+PARAM_rds_kill_7.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 100
+PARAM_rds_kill_8.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_9.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+PARAM_rds_kill_PREPARED.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_query_1.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_query_10.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_query_11.log	1	ERROR 1317 (70100) at line 1: Query execution was interrupted
+PARAM_rds_kill_query_2.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_query_3.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+PARAM_rds_kill_query_4.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+PARAM_rds_kill_query_5.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+PARAM_rds_kill_query_6.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+PARAM_rds_kill_query_7.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 100
+PARAM_rds_kill_query_8.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+PARAM_rds_kill_query_9.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+PARAM_rds_kill_query_PREPARED.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+RACE_KILLER_1.log	1	ERROR 1094 (HY000) at line 1: Unknown thread id: 918
+TX_QUERY_LOCK_HELD.log	1	ERROR 1205 (HY000) at line 1: Lock wait timeout exceeded; try restarting transaction
+life_execute.log	3	ERROR 1370 (42000) at line 2: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+life_execute.log	6	ERROR 1094 (HY000) at line 3: Unknown thread id: 0
+life_execute.log	9	ERROR 1370 (42000) at line 4: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+life_role.log	4	ERROR 1094 (HY000) at line 2: Unknown thread id: 0
+life_role.log	8	ERROR 1370 (42000) at line 3: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query'
+self_query.log	3	ERROR 1317 (70100) at line 2: Query execution was interrupted
+self_session.log	3	ERROR 1317 (70100) at line 2: Query execution was interrupted
+self_session.log	4	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+self_session.log	5	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+status.tsv	2	LIFE_EXEC_PERSISTENT lifecycle 0 READY_life_execute 825 cskaws_life@ecs-124-70-231-10.compute.hwclouds-dns.com cskaws_life@% NONE BEGIN_LIFE_EXEC_BEFORE ERROR 1370 (42000) at line 2: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query' END_LIFE_EXEC_BEFORE BEGIN_LIFE_EXEC_AFTER_GRANT ERROR 1094 (HY000) at line 3: Unknown thread id: 0 END_LIFE_EXEC_AFTER_GRANT BEGIN_LIFE_EXEC_AFTER_REVOKE ERROR 1370 (42000) at line 4: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query' END_LIFE_EXEC_AFTER_REVOKE
+status.tsv	3	LIFE_EXEC_NEW_CONNECTION lifecycle 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+status.tsv	4	LIFE_ROLE_PERSISTENT lifecycle 0 READY_life_role 829 cskaws_dr@ecs-124-70-231-10.compute.hwclouds-dns.com cskaws_dr@% NONE BEGIN_LIFE_ROLE_ACTIVE `rds_superuser_role`@`%` ERROR 1094 (HY000) at line 2: Unknown thread id: 0 END_LIFE_ROLE_ACTIVE BEGIN_LIFE_ROLE_AFTER_REVOKE `rds_superuser_role`@`%` ERROR 1370 (42000) at line 3: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query' END_LIFE_ROLE_AFTER_REVOKE
+status.tsv	5	LIFE_ROLE_NEW_CONNECTION lifecycle 1 NONE ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query'
+status.tsv	6	AUTH_ORDINARY_QUERY authorization 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+status.tsv	7	AUTH_ORDINARY_SESSION authorization 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill'
+status.tsv	8	AUTH_PROCESS_QUERY authorization 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dp'@'%' for routine 'mysql.rds_kill_query'
+status.tsv	9	AUTH_PROCESS_SESSION authorization 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dp'@'%' for routine 'mysql.rds_kill'
+status.tsv	10	AUTH_EXECUTE_QUERY authorization 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	11	AUTH_EXECUTE_SESSION authorization 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	12	AUTH_ROLE_NONE_QUERY authorization 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query'
+status.tsv	13	AUTH_ROLE_NONE_SESSION authorization 1 ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill'
+status.tsv	14	AUTH_ROLE_ACTIVE_QUERY authorization 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	15	AUTH_ROLE_ACTIVE_SESSION authorization 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	16	SELF_QUERY self 0 READY_self_query 843 cskaws_dx@ecs-124-70-231-10.compute.hwclouds-dns.com cskaws_dx@% NONE BEGIN_SELF_QUERY ERROR 1317 (70100) at line 2: Query execution was interrupted SELF_QUERY_CONNECTION_ALIVE END_SELF_QUERY
+status.tsv	17	SELF_SESSION self 0 READY_self_session 844 cskaws_dx@ecs-124-70-231-10.compute.hwclouds-dns.com cskaws_dx@% NONE BEGIN_SELF_SESSION ERROR 1317 (70100) at line 2: Query execution was interrupted ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query ORIGINAL_CONNECTION_ID=844 PROCESSLIST_COUNT_AFTER=0
+status.tsv	22	TX_QUERY_LOCK_HELD transaction 1 ERROR 1205 (HY000) at line 1: Lock wait timeout exceeded; try restarting transaction
+status.tsv	27	TX_SESSION_TARGET transaction 0 READY_tx_session_target 854 cskaws_dt@ecs-124-70-231-10.compute.hwclouds-dns.com cskaws_dt@% NONE TXS_LOCKED ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+status.tsv	29	LOCK_WAITER_rds_kill_query_TARGET lock-wait 1 ERROR 1317 (70100) at line 2: Query execution was interrupted waiter_id=859 waiter_rc=1
+status.tsv	31	LOCK_WAITER_rds_kill_TARGET lock-wait 1 ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query waiter_id=867 waiter_rc=1
+status.tsv	44	NATIVE_U0_QUERY native-kill 1 ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+status.tsv	45	NATIVE_PROCESS_QUERY native-kill 1 ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+status.tsv	46	NATIVE_EXECUTE_QUERY native-kill 1 ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+status.tsv	47	NATIVE_MASTER_QUERY native-kill 1 ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+status.tsv	48	NATIVE_MASTER_CONNECTION native-kill 1 ERROR 1095 (HY000) at line 1: You are not owner of thread 912
+status.tsv	51	PARAM_rds_kill_query_1 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	52	PARAM_rds_kill_query_2 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	53	PARAM_rds_kill_query_3 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+status.tsv	54	PARAM_rds_kill_query_4 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+status.tsv	55	PARAM_rds_kill_query_5 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+status.tsv	56	PARAM_rds_kill_query_6 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+status.tsv	57	PARAM_rds_kill_query_7 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 100
+status.tsv	58	PARAM_rds_kill_query_8 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	59	PARAM_rds_kill_query_9 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+status.tsv	60	PARAM_rds_kill_query_10 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	61	PARAM_rds_kill_query_11 parameter 1 ERROR 1317 (70100) at line 1: Query execution was interrupted
+status.tsv	62	PARAM_rds_kill_query_PREPARED parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	63	PARAM_rds_kill_1 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	64	PARAM_rds_kill_2 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	65	PARAM_rds_kill_3 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+status.tsv	66	PARAM_rds_kill_4 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 2
+status.tsv	67	PARAM_rds_kill_5 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+status.tsv	68	PARAM_rds_kill_6 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 123
+status.tsv	69	PARAM_rds_kill_7 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 100
+status.tsv	70	PARAM_rds_kill_8 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	71	PARAM_rds_kill_9 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 4294967295
+status.tsv	72	PARAM_rds_kill_10 parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+status.tsv	73	PARAM_rds_kill_11 parameter 1 ERROR 1317 (70100) at line 1: Query execution was interrupted
+status.tsv	74	PARAM_rds_kill_PREPARED parameter 1 ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+targets/SCOPE_rds_kill_MASTER_TARGET.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+targets/SCOPE_rds_kill_ORDINARY.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+targets/SCOPE_rds_kill_PROCESS.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+targets/SCOPE_rds_kill_ROLE_TARGET.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+targets/SCOPE_rds_kill_SAME_ACCOUNT.log	2	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+transactions/LOCK_WAITER_rds_kill.log	1	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+transactions/LOCK_WAITER_rds_kill_query.log	1	ERROR 1317 (70100) at line 2: Query execution was interrupted
+tx_session_target.log	3	ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query

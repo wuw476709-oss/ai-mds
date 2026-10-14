@@ -1,0 +1,9 @@
+READY_life_role	829	cskaws_dr@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_dr@%	NONE
+BEGIN_LIFE_ROLE_ACTIVE
+`rds_superuser_role`@`%`
+ERROR 1094 (HY000) at line 2: Unknown thread id: 0
+END_LIFE_ROLE_ACTIVE
+BEGIN_LIFE_ROLE_AFTER_REVOKE
+`rds_superuser_role`@`%`
+ERROR 1370 (42000) at line 3: execute command denied to user 'cskaws_dr'@'%' for routine 'mysql.rds_kill_query'
+END_LIFE_ROLE_AFTER_REVOKE

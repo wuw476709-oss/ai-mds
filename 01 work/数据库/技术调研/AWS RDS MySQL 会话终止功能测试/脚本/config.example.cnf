@@ -1,0 +1,7 @@
+[client]
+host=replace-with-rds-endpoint
+port=3306
+user=replace-with-master-user
+password=replace-with-master-password
+ssl-mode=REQUIRED
+

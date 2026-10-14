@@ -1,0 +1,1 @@
+ERROR 1227 (42000) at line 1: Access denied; you need (at least one of) the WITH ADMIN, ROLE_ADMIN, SUPER privilege(s) for this operation

@@ -1,0 +1,10 @@
+READY_life_execute	825	cskaws_life@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_life@%	NONE
+BEGIN_LIFE_EXEC_BEFORE
+ERROR 1370 (42000) at line 2: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+END_LIFE_EXEC_BEFORE
+BEGIN_LIFE_EXEC_AFTER_GRANT
+ERROR 1094 (HY000) at line 3: Unknown thread id: 0
+END_LIFE_EXEC_AFTER_GRANT
+BEGIN_LIFE_EXEC_AFTER_REVOKE
+ERROR 1370 (42000) at line 4: execute command denied to user 'cskaws_life'@'%' for routine 'mysql.rds_kill_query'
+END_LIFE_EXEC_AFTER_REVOKE

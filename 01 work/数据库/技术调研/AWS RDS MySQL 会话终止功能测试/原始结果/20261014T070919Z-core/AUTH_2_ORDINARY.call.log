@@ -1,0 +1,1 @@
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_u0'@'%' for routine 'mysql.rds_kill_query'

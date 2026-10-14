@@ -1,0 +1,8 @@
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/query_guard_result.txt
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/rds_kill_query_reserved.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/reserved_processes_after.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/reserved_processes_before.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/reserved_target_after_query.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/reserved_users.log
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/status.tsv
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic/target_id.txt

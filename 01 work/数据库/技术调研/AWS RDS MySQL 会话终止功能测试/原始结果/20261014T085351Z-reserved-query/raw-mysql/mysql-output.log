@@ -1,0 +1,50 @@
+
+===== BEGIN query_guard_result.txt =====
+UNEXPECTED: query procedure did not return the reserved-target rejection
+
+===== END query_guard_result.txt =====
+
+===== BEGIN rds_kill_query_reserved.log =====
+ERROR 1644 (45000) at line 1: CANNOT KILL RDSADMIN SESSION
+
+===== END rds_kill_query_reserved.log =====
+
+===== BEGIN reserved_processes_after.log =====
+13	rdsadmin	localhost	Sleep	3	
+25	rdsadmin	localhost	Sleep	0	
+
+===== END reserved_processes_after.log =====
+
+===== BEGIN reserved_processes_before.log =====
+13	rdsadmin	localhost	Sleep	2	
+25	rdsadmin	localhost	Sleep	0	
+
+===== END reserved_processes_before.log =====
+
+===== BEGIN reserved_target_after_query.log =====
+13	rdsadmin	localhost	Sleep	1	
+
+===== END reserved_target_after_query.log =====
+
+===== BEGIN reserved_users.log =====
+mysql.infoschema	localhost
+mysql.session	localhost
+mysql.sys	localhost
+rdsadmin	localhost
+
+===== END reserved_users.log =====
+
+===== BEGIN status.tsv =====
+case_id	rc
+reserved_users	0
+reserved_processes_before	0
+rds_kill_query_reserved	1
+reserved_target_after_query	0
+reserved_processes_after	0
+
+===== END status.tsv =====
+
+===== BEGIN target_id.txt =====
+13
+
+===== END target_id.txt =====

@@ -1,0 +1,3 @@
+ID	USER	HOST	COMMAND	STATE	reserved_user	reserved_host
+13	rdsadmin	localhost	Sleep		rdsadmin	localhost
+25	rdsadmin	localhost	Sleep		rdsadmin	localhost

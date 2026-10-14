@@ -1,0 +1,4 @@
+Grants for cskaws_ue@%
+GRANT USAGE ON *.* TO `cskaws_ue`@`%` WITH GRANT OPTION
+GRANT SELECT, INSERT, UPDATE, DELETE ON `cskaws_db`.* TO `cskaws_ue`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill` TO `cskaws_ue`@`%`

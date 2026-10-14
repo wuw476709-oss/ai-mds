@@ -1,0 +1,33 @@
+
+===== BEGIN prior_query_stage.txt =====
+/Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T085351Z-reserved-dynamic
+
+===== END prior_query_stage.txt =====
+
+===== BEGIN rds_kill_reserved.log =====
+ERROR 1644 (45000) at line 1: CANNOT KILL RDSADMIN SESSION
+
+===== END rds_kill_reserved.log =====
+
+===== BEGIN status.tsv =====
+case_id	rc
+target_before	0
+rds_kill_reserved	1
+target_after	0
+
+===== END status.tsv =====
+
+===== BEGIN target_after.log =====
+13	rdsadmin	localhost	Sleep	2	
+
+===== END target_after.log =====
+
+===== BEGIN target_before.log =====
+13	rdsadmin	localhost	Sleep	9	
+
+===== END target_before.log =====
+
+===== BEGIN target_id.txt =====
+13
+
+===== END target_id.txt =====

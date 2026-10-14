@@ -1,0 +1,5 @@
+user	host	description
+mysql.infoschema	localhost	MySQL reserved system account (https://dev.mysql.com/doc/refman/8.0/en/reserved-accounts.html)
+mysql.session	localhost	MySQL reserved system account (https://dev.mysql.com/doc/refman/8.0/en/reserved-accounts.html)
+mysql.sys	localhost	MySQL reserved system account (https://dev.mysql.com/doc/refman/8.0/en/reserved-accounts.html)
+rdsadmin	localhost	RDS management user

@@ -1,0 +1,23 @@
+2026-10-14T07:09:19Z Checking connectivity and capturing baseline
+2026-10-14T07:09:43Z Creating disposable users
+2026-10-14T07:10:19Z Running AUTH_1_MASTER caller=MASTER procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:24Z Running AUTH_2_ORDINARY caller=cskaws_u0 procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:31Z Running AUTH_3_PROCESS caller=cskaws_up procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:35Z Running AUTH_4_EXECUTE caller=cskaws_ue procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:41Z Running AUTH_5_EXECUTE_SESSION caller=cskaws_ue procedure=rds_kill target=cskaws_t1
+2026-10-14T07:10:48Z Running AUTH_6_ROLE_NONE caller=cskaws_ur procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:10:56Z Running AUTH_7_ROLE_ALL caller=cskaws_ur procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:11:08Z Running SCOPE_2_SAME_ACCOUNT caller=MASTER procedure=rds_kill_query target=MASTER
+2026-10-14T07:11:18Z Running SCOPE_2B_SAME_SESSION caller=MASTER procedure=rds_kill target=MASTER
+2026-10-14T07:11:25Z Running SCOPE_3_CROSS_ACCOUNT caller=MASTER procedure=rds_kill_query target=cskaws_same
+2026-10-14T07:11:33Z Running SEM_1_QUERY caller=MASTER procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:11:39Z Running SEM_2_SESSION caller=MASTER procedure=rds_kill target=cskaws_t1
+2026-10-14T07:11:44Z Running PARAM_NULL caller=MASTER procedure=rds_kill_query argument=NULL
+2026-10-14T07:11:46Z Running PARAM_ZERO caller=MASTER procedure=rds_kill_query argument=0
+2026-10-14T07:11:50Z Running PARAM_NEGATIVE caller=MASTER procedure=rds_kill_query argument=-1
+2026-10-14T07:11:53Z Running PARAM_DECIMAL caller=MASTER procedure=rds_kill_query argument=1.5
+2026-10-14T07:11:56Z Running PARAM_TEXT caller=MASTER procedure=rds_kill_query argument='not-a-thread-id'
+2026-10-14T07:11:58Z Running PARAM_OVERFLOW caller=MASTER procedure=rds_kill_query argument=4294967296
+2026-10-14T07:12:03Z Running LIFE_2_REVOKE caller=cskaws_ue procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:12:16Z Running LIFE_4_ROLE_REVOKE caller=cskaws_ur procedure=rds_kill_query target=cskaws_t1
+2026-10-14T07:12:25Z Evidence collected in /Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T070919Z

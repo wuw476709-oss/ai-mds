@@ -1,0 +1,6 @@
+READY_self_session	844	cskaws_dx@ecs-124-70-231-10.compute.hwclouds-dns.com	cskaws_dx@%	NONE
+BEGIN_SELF_SESSION
+ERROR 1317 (70100) at line 2: Query execution was interrupted
+ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+ERROR 2013 (HY000) at line 2: Lost connection to MySQL server during query
+ORIGINAL_CONNECTION_ID=844 PROCESSLIST_COUNT_AFTER=0

@@ -1,0 +1,4 @@
+case_id	rc
+target_before	0
+rds_kill_reserved	1
+target_after	0

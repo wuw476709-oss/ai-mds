@@ -1,0 +1,2 @@
+Grants for cskaws_g1@%
+GRANT USAGE ON *.* TO `cskaws_g1`@`%`

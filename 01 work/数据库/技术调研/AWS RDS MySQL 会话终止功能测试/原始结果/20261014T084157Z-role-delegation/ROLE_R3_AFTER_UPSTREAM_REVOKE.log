@@ -1,0 +1,3 @@
+CURRENT_ROLE()
+`rds_superuser_role`@`%`
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0

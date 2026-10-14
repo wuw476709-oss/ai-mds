@@ -1,0 +1,16 @@
+2026-10-14T08:43:00Z Preparing isolated deep-test accounts and lock table
+2026-10-14T08:43:09Z Testing GRANT and REVOKE on one persistent connection
+2026-10-14T08:43:24Z Testing active role revocation on one persistent connection
+2026-10-14T08:43:34Z Testing both routines for each caller authorization state
+2026-10-14T08:44:06Z Testing true self-kill with CONNECTION_ID()
+2026-10-14T08:44:16Z Testing KILL QUERY against an idle connection
+2026-10-14T08:44:26Z Testing KILL QUERY transaction and row-lock aftermath
+2026-10-14T08:44:45Z Testing KILL CONNECTION rollback and lock release
+2026-10-14T08:44:56Z Testing a row-lock waiter as the direct target
+2026-10-14T08:45:23Z Testing complete target matrix for both procedures
+2026-10-14T08:46:27Z Testing process visibility separately from kill authority
+2026-10-14T08:46:39Z Testing native KILL authorization baseline
+2026-10-14T08:46:57Z Testing two concurrent killers against one target
+2026-10-14T08:47:02Z Testing parameter conversion matrix for both procedures
+2026-10-14T08:47:59Z Deep evidence collected in /Users/kivan/Documents/open-source-mysql/projects/session-kill/aws-rds-test/results/20261014T084300Z-deep-semantics
+2026-10-14T08:47:59Z Leaving deep-test users/table because CSK_KEEP_OBJECTS=1

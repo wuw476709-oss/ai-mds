@@ -1,0 +1,181 @@
+
+===== BEGIN DATABASE_CALL_QUERY.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END DATABASE_CALL_QUERY.log =====
+
+===== BEGIN DATABASE_CALL_SESSION.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END DATABASE_CALL_SESSION.log =====
+
+===== BEGIN DATABASE_CHAIN_G1_G2.log =====
+
+===== END DATABASE_CHAIN_G1_G2.log =====
+
+===== BEGIN DATABASE_CHAIN_G2_G3.log =====
+
+===== END DATABASE_CHAIN_G2_G3.log =====
+
+===== BEGIN DATABASE_DOWNSTREAM_AFTER_REVOKE.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END DATABASE_DOWNSTREAM_AFTER_REVOKE.log =====
+
+===== BEGIN DATABASE_GRANT_NO_GO.log =====
+
+===== END DATABASE_GRANT_NO_GO.log =====
+
+===== BEGIN DATABASE_GRANT_WITH_GO.log =====
+
+===== END DATABASE_GRANT_WITH_GO.log =====
+
+===== BEGIN DATABASE_REGRANT_NO_GO.log =====
+ERROR 1044 (42000) at line 1: Access denied for user 'cskaws_g1'@'%' to database 'mysql'
+
+===== END DATABASE_REGRANT_NO_GO.log =====
+
+===== BEGIN DATABASE_REVOKE_UPSTREAM.log =====
+
+===== END DATABASE_REVOKE_UPSTREAM.log =====
+
+===== BEGIN FINAL_GRANTS_cskaws_g1.log =====
+Grants for cskaws_g1@%
+GRANT USAGE ON *.* TO `cskaws_g1`@`%`
+
+===== END FINAL_GRANTS_cskaws_g1.log =====
+
+===== BEGIN FINAL_GRANTS_cskaws_g2.log =====
+Grants for cskaws_g2@%
+GRANT USAGE ON *.* TO `cskaws_g2`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill_query` TO `cskaws_g2`@`%` WITH GRANT OPTION
+
+===== END FINAL_GRANTS_cskaws_g2.log =====
+
+===== BEGIN FINAL_GRANTS_cskaws_g3.log =====
+Grants for cskaws_g3@%
+GRANT USAGE ON *.* TO `cskaws_g3`@`%`
+GRANT EXECUTE ON PROCEDURE `mysql`.`rds_kill_query` TO `cskaws_g3`@`%`
+
+===== END FINAL_GRANTS_cskaws_g3.log =====
+
+===== BEGIN GLOBAL_CALL_QUERY.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END GLOBAL_CALL_QUERY.log =====
+
+===== BEGIN GLOBAL_CALL_SESSION.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END GLOBAL_CALL_SESSION.log =====
+
+===== BEGIN GLOBAL_CHAIN_G1_G2.log =====
+
+===== END GLOBAL_CHAIN_G1_G2.log =====
+
+===== BEGIN GLOBAL_CHAIN_G2_G3.log =====
+
+===== END GLOBAL_CHAIN_G2_G3.log =====
+
+===== BEGIN GLOBAL_DOWNSTREAM_AFTER_REVOKE.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END GLOBAL_DOWNSTREAM_AFTER_REVOKE.log =====
+
+===== BEGIN GLOBAL_GRANT_NO_GO.log =====
+
+===== END GLOBAL_GRANT_NO_GO.log =====
+
+===== BEGIN GLOBAL_GRANT_WITH_GO.log =====
+
+===== END GLOBAL_GRANT_WITH_GO.log =====
+
+===== BEGIN GLOBAL_REGRANT_NO_GO.log =====
+ERROR 1045 (28000) at line 1: Access denied for user 'cskaws_g1'@'%' (using password: YES)
+
+===== END GLOBAL_REGRANT_NO_GO.log =====
+
+===== BEGIN GLOBAL_REVOKE_UPSTREAM.log =====
+
+===== END GLOBAL_REVOKE_UPSTREAM.log =====
+
+===== BEGIN PROCEDURE_ALLOWED_QUERY.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END PROCEDURE_ALLOWED_QUERY.log =====
+
+===== BEGIN PROCEDURE_CHAIN_G1_G2.log =====
+
+===== END PROCEDURE_CHAIN_G1_G2.log =====
+
+===== BEGIN PROCEDURE_CHAIN_G2_G3.log =====
+
+===== END PROCEDURE_CHAIN_G2_G3.log =====
+
+===== BEGIN PROCEDURE_DENIED_SESSION.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_g1'@'%' for routine 'mysql.rds_kill'
+
+===== END PROCEDURE_DENIED_SESSION.log =====
+
+===== BEGIN PROCEDURE_DOWNSTREAM_AFTER_REVOKE.log =====
+ERROR 1094 (HY000) at line 1: Unknown thread id: 0
+
+===== END PROCEDURE_DOWNSTREAM_AFTER_REVOKE.log =====
+
+===== BEGIN PROCEDURE_DOWNSTREAM_OTHER_DENIED.log =====
+ERROR 1370 (42000) at line 1: execute command denied to user 'cskaws_g3'@'%' for routine 'mysql.rds_kill'
+
+===== END PROCEDURE_DOWNSTREAM_OTHER_DENIED.log =====
+
+===== BEGIN PROCEDURE_GRANT_NO_GO.log =====
+
+===== END PROCEDURE_GRANT_NO_GO.log =====
+
+===== BEGIN PROCEDURE_GRANT_WITH_GO.log =====
+
+===== END PROCEDURE_GRANT_WITH_GO.log =====
+
+===== BEGIN PROCEDURE_REGRANT_NO_GO.log =====
+ERROR 1370 (42000) at line 1: grant command denied to user 'cskaws_g1'@'%' for routine 'mysql.rds_kill_query'
+
+===== END PROCEDURE_REGRANT_NO_GO.log =====
+
+===== BEGIN PROCEDURE_REVOKE_UPSTREAM.log =====
+
+===== END PROCEDURE_REVOKE_UPSTREAM.log =====
+
+===== BEGIN status.tsv =====
+case_id	rc
+GLOBAL_GRANT_NO_GO	0
+GLOBAL_CALL_QUERY	1
+GLOBAL_CALL_SESSION	1
+GLOBAL_REGRANT_NO_GO	1
+GLOBAL_GRANT_WITH_GO	0
+GLOBAL_CHAIN_G1_G2	0
+GLOBAL_CHAIN_G2_G3	0
+GLOBAL_REVOKE_UPSTREAM	0
+GLOBAL_DOWNSTREAM_AFTER_REVOKE	1
+DATABASE_GRANT_NO_GO	0
+DATABASE_CALL_QUERY	1
+DATABASE_CALL_SESSION	1
+DATABASE_REGRANT_NO_GO	1
+DATABASE_GRANT_WITH_GO	0
+DATABASE_CHAIN_G1_G2	0
+DATABASE_CHAIN_G2_G3	0
+DATABASE_REVOKE_UPSTREAM	0
+DATABASE_DOWNSTREAM_AFTER_REVOKE	1
+PROCEDURE_GRANT_NO_GO	0
+PROCEDURE_ALLOWED_QUERY	1
+PROCEDURE_DENIED_SESSION	1
+PROCEDURE_REGRANT_NO_GO	1
+PROCEDURE_GRANT_WITH_GO	0
+PROCEDURE_CHAIN_G1_G2	0
+PROCEDURE_CHAIN_G2_G3	0
+PROCEDURE_REVOKE_UPSTREAM	0
+PROCEDURE_DOWNSTREAM_AFTER_REVOKE	1
+PROCEDURE_DOWNSTREAM_OTHER_DENIED	1
+FINAL_GRANTS_cskaws_g1	0
+FINAL_GRANTS_cskaws_g2	0
+FINAL_GRANTS_cskaws_g3	0
+
+===== END status.tsv =====
