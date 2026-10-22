@@ -44,77 +44,51 @@
 
 ## 2. Agent 整体思路图
 
+这张图只表达课程主线：Agent 不是一次模型调用，而是围绕目标不断组装上下文、做出决策、执行动作、观察结果并验证完成情况的运行闭环。
+
 ```mermaid
-flowchart TB
-    U[用户 / 上游系统] --> INPUT[任务输入]
+flowchart LR
+    U[用户任务] --> A[Agent Runtime / Loop]
+    A --> C[组装上下文]
+    C --> M[大模型决策]
+    M --> T[工具 / MCP / Subagent]
+    T --> O[观察执行结果]
+    O --> A
+    M --> V[验证与输出]
 
-    subgraph RUNTIME[Agent Runtime]
-        INPUT --> LOOP[Agent Loop / Orchestrator]
-        LOOP --> PLAN[任务理解与 Planning]
-        PLAN --> CONTEXT[Context Assembly]
-        CONTEXT --> MODEL[Model Adapter / Router]
-        MODEL --> DECIDE{模型决策}
-
-        DECIDE -->|调用工具| TOOL[Tool Registry / Calling]
-        DECIDE -->|委派任务| SUB[Subagent]
-        DECIDE -->|请求信息| ASK[向用户提问]
-        DECIDE -->|候选结果| VERIFY[结果与证据验证]
-
-        TOOL --> GUARD[Policy / Guard / Permission]
-        GUARD -->|必要时| APPROVAL[Human Approval]
-        GUARD -->|允许| EXEC[Tool Executor]
-        APPROVAL -->|批准| EXEC
-        EXEC --> OBSERVE[观察结果]
-        SUB --> OBSERVE
-        ASK --> INPUT
-        OBSERVE --> LOOP
-        VERIFY -->|未通过| LOOP
-        VERIFY -->|通过| OUTPUT[回答 / Artifact / Action]
-
-        RULES[Instructions / AGENTS.md / Skills] -.提供规则和工作方法.-> LOOP
-        SESSION[Session / State Manager] -.恢复状态与历史.-> LOOP
-        MEMORY[Memory Manager / Policy] -.召回结果进入上下文.-> CONTEXT
-        HOOK[Lifecycle Hooks / Middleware] -.监听和扩展生命周期.-> LOOP
-        HOOK -.拦截工具事件.-> TOOL
-        HOOK -.触发记忆召回与写入.-> MEMORY
-        TRACE[Trace / Evaluation] -.记录和评价.-> RUNTIME
-        SANDBOX[Sandbox / Security] -.限制执行边界.-> EXEC
-    end
-
-    MODEL <-->|推理请求 / 响应| LLM[LLM Provider / Model Serving]
-    LLM --- KVC[KV Cache / Prefix Cache]
-
-    EXEC --> CONNECT[MCP / API / SDK / CLI Adapter]
-    EXEC --> LOCAL[Filesystem / Shell / Browser]
-    CONNECT --> NEON[Neon Backend Platform<br/>Lakebase Postgres]
-    CONNECT --> EXT[代码仓库及其他外部系统]
-
-    SESSION <-->|持久化 / 恢复| STATE[(Session / Checkpoint Store)]
-    MEMORY <-->|召回 / 写入 / 更新 / 遗忘| CDB[ContextDB / Long-term Memory Service]
-    CONNECT -.可选管理或诊断接口.-> CDB
-    STATE -.可选使用 Postgres.-> NEON
-    CDB -.可选以 Postgres + pgvector 持久化.-> NEON
+    S[Skills / Instructions] -.指导.-> A
+    H[Hooks / Guard] -.监听与控制.-> T
+    ST[Session / Checkpoint] -.保存运行状态.-> A
+    MEM[ContextDB / 长期记忆] -.召回与沉淀.-> C
 ```
 
-这张图表达的是**逻辑角色**，不是要求所有模块分别部署。几个容易混淆的位置需要特别说明：
+- **Skills / Instructions** 告诉 Agent 应该遵循什么规则、采用什么工作方法。
+- **Hooks / Guard** 在生命周期和工具执行节点监听、增强或拦截。
+- **Session / Checkpoint** 保存当前任务的状态，使任务可以连续执行和中断恢复。
+- **ContextDB / 长期记忆** 保存跨会话仍有价值的知识、偏好和经验，并在需要时召回到上下文。
 
-- **模型不等于 Agent Runtime**：Runtime 负责循环、上下文、工具和状态管理，通过 Model Adapter 调用外部模型服务；KV Cache/Prefix Cache 位于模型推理服务侧，不是 Agent Memory。
-- **MCP/API/SDK/CLI 是连接方式，不是数据资源**：文件系统、Shell、浏览器、Neon 和代码仓库才是 Agent 实际操作的资源。MCP 只是其中一种标准化工具协议。
-- **Hook 与 Guard 不等价**：Hook/Middleware 是生命周期扩展机制；Guard、Permission 和 Approval 是其中可挂载的策略与控制能力。
-- **Session 与长期记忆不同**：Session/Checkpoint 保存当前任务的可恢复运行状态；长期 Memory 保存跨会话仍有价值的知识、偏好和经验。
+### 2.1 Neon、ContextDB 与 Agent 的关系
 
-图中的长期 Memory 分成两层：
+```mermaid
+flowchart LR
+    A[Agent Runtime] -->|长期记忆| C[ContextDB]
+    A -->|MCP / Platform API| N[Neon控制面]
+    A -->|SQL / Driver| B[Neon数据库分支]
+    N -->|创建 / 删除 / 重置| B
 
-- **Memory Manager / Policy** 位于 Agent Runtime 内，负责决定记什么、何时召回、如何过滤、何时更新或遗忘。
-- **ContextDB** 位于 Runtime 外部，作为 Agent 的长期记忆服务，负责持久化、检索、时间语义、隔离和治理。
+    C -.可选使用.-> P[(Neon Postgres + pgvector)]
+    S[Session / Checkpoint] -.可选使用.-> P
+```
 
-典型流程是在模型推理前由 Hook/Middleware 触发召回，将经过过滤的记忆交给 Context Assembly；在任务或Turn结束后提取候选记忆，经策略判断后写入ContextDB。ContextDB可以通过SDK、API或Memory Adapter接入；MCP可以作为可选的管理或工具接口，但不是ContextDB在Agent架构中的唯一位置。
+两者在架构中的定位不同：
 
-### 2.1 Neon 在图中的定义和位置
+- **ContextDB 是 Agent 的长期记忆服务**，负责记忆的写入、召回、更新、遗忘、时间语义、隔离和治理。
+- **Neon 是外部数据基础设施**。Agent 可以通过 MCP/API 管理数据库资源，通过 SQL/Driver 操作业务数据，也可以为每个任务创建隔离数据库分支。
+- ContextDB 可以使用 Neon Postgres + pgvector 作为底层存储，但二者仍然是“长期记忆服务”和“数据库平台”两个逻辑层次。
 
-按当前官方定位，**Neon 是面向应用和 Agent 的 Backend Platform**，除数据库外还包括 Auth、Object Storage、Functions 和 AI Gateway；其核心数据库是 **Lakebase Postgres（Serverless Postgres）**。本课程不泛化研究整套 Backend，而聚焦最能体现 Agent 开发实战和数据机会的 Postgres、数据库分支、MCP/API/SDK 及 pgvector 能力。Lakebase Postgres 把运行查询的计算层与保存 WAL、页面和历史数据的持久化存储层解耦，从而支持计算弹性伸缩、闲置休眠、快速恢复以及轻量的 Copy-on-Write 数据库分支。
+按当前官方定位，**Neon 是面向应用和 Agent 的 Backend Platform**，除数据库外还包括 Auth、Object Storage、Functions 和 AI Gateway；其核心数据库是 **Lakebase Postgres（Serverless Postgres）**。本课程不泛化研究整套 Backend，而聚焦最能体现 Agent 开发实战和数据机会的 Postgres、数据库分支、MCP/API/SDK 及 pgvector 能力。
 
-Neon 在 Agent 体系中不是 Agent 的内部模块，而是外部数据基础设施，可承担四种角色：
+Neon 在课程实践中可以承担四种角色：
 
 | Neon角色 | 与Agent的关系 | 本课程中的实践 |
 |---|---|---|
@@ -122,18 +96,6 @@ Neon 在 Agent 体系中不是 Agent 的内部模块，而是外部数据基础�
 | 隔离执行环境 | Agent 为任务创建数据库分支，先试验再验证，避免直接影响主库 | Migration、危险SQL和回滚实验 |
 | Agent状态存储 | Session、Checkpoint、Trace服务可选择使用Postgres持久化 | 中断恢复、幂等和审计实验 |
 | ContextDB底层存储 | ContextDB在当前实现中可使用PostgreSQL + pgvector；Neon可作为一种部署后端 | 长期记忆、向量召回和隔离实验 |
-
-因此需要区分：**ContextDB是长期记忆的逻辑服务，Neon是可承载应用、Agent和数据能力的平台；ContextDB可以使用Neon Postgres作为底层数据库，但不能把Neon直接画成Memory，也不能把ContextDB只画成普通MCP工具。**
-
-```mermaid
-flowchart LR
-    A[Agent Runtime] -->|Memory Adapter / SDK / API| C[ContextDB<br/>长期记忆服务]
-    A -->|SQL / Driver / MCP / API| B[Neon Branch<br/>业务数据与隔离实验]
-    A -->|状态服务| S[Session / Checkpoint Service]
-    C -.可选持久化后端.-> N[(Neon Postgres + pgvector)]
-    S -.可选持久化后端.-> N
-    B --> N
-```
 
 Agent 最核心的运行闭环是：
 
@@ -1145,4 +1107,69 @@ KV Cache是从长上下文和推理成本延伸出的专题，不占用Agent主�
 ## 24. 向领导汇报的建议表述
 
 > 我计划以“Agent开发实战”为主线，先建立完整的 Agent 机制图，再把 Agent Loop、Planning、Tool、MCP、Skill、Hook、Session、Memory、多 Agent、安全和评测等内容拆成专题，由团队成员分头学习和动手验证。课程会选择四种不同风格的 Agent Harness 进行对照：用 Pi 看懂最小内核，用 DSH 理解插件化和生命周期扩展，用 Deep Agents 学习 Planning、Subagent 和持久状态，用 Codex 观察 Sandbox、Approval、Skill、MCP 等生产级完整形态。每个专题都需要有原理、真实实现和可运行 Demo。实践上会结合我们正在做的 Neon、ContextDB，最终完成一个数据库研发 Agent，把各模块串起来。在学习过程中，我们也会观察 Agent 对数据库、缓存和存储提出的新需求；Neon、ContextDB 是优先结合方向，但如果发现其他有价值的机会，也会记录并提出验证方案。这样既能让团队真正搞清楚 Agent 机制，也能把学习结果转化为项目能力和新的机会判断。
+
+---
+
+## 附录：Agent 完整逻辑架构参考图
+
+本图用于专题学习和技术讨论，不建议在第一次总体介绍时展开。它补充展示模型服务、KV Cache、状态存储、长期记忆、工具适配、权限和可观测等完整逻辑角色。
+
+```mermaid
+flowchart TB
+    U[用户 / 上游系统] --> INPUT[任务输入]
+
+    subgraph RUNTIME[Agent Runtime]
+        INPUT --> LOOP[Agent Loop / Orchestrator]
+        LOOP --> PLAN[任务理解与 Planning]
+        PLAN --> CONTEXT[Context Assembly]
+        CONTEXT --> MODEL[Model Adapter / Router]
+        MODEL --> DECIDE{模型决策}
+
+        DECIDE -->|调用工具| TOOL[Tool Registry / Calling]
+        DECIDE -->|委派任务| SUB[Subagent]
+        DECIDE -->|请求信息| ASK[向用户提问]
+        DECIDE -->|候选结果| VERIFY[结果与证据验证]
+
+        TOOL --> GUARD[Policy / Guard / Permission]
+        GUARD -->|必要时| APPROVAL[Human Approval]
+        GUARD -->|允许| EXEC[Tool Executor]
+        APPROVAL -->|批准| EXEC
+        EXEC --> OBSERVE[观察结果]
+        SUB --> OBSERVE
+        ASK --> INPUT
+        OBSERVE --> LOOP
+        VERIFY -->|未通过| LOOP
+        VERIFY -->|通过| OUTPUT[回答 / Artifact / Action]
+
+        RULES[Instructions / AGENTS.md / Skills] -.提供规则和工作方法.-> LOOP
+        SESSION[Session / State Manager] -.恢复状态与历史.-> LOOP
+        MEMORY[Memory Manager / Policy] -.召回结果进入上下文.-> CONTEXT
+        HOOK[Lifecycle Hooks / Middleware] -.监听和扩展生命周期.-> LOOP
+        HOOK -.拦截工具事件.-> TOOL
+        HOOK -.触发记忆召回与写入.-> MEMORY
+        TRACE[Trace / Evaluation] -.记录和评价.-> RUNTIME
+        SANDBOX[Sandbox / Security] -.限制执行边界.-> EXEC
+    end
+
+    MODEL <-->|推理请求 / 响应| LLM[LLM Provider / Model Serving]
+    LLM --- KVC[KV Cache / Prefix Cache]
+
+    EXEC --> CONNECT[MCP / API / SDK / CLI Adapter]
+    EXEC --> LOCAL[Filesystem / Shell / Browser]
+    CONNECT --> NEON[Neon Backend Platform<br/>Lakebase Postgres]
+    CONNECT --> EXT[代码仓库及其他外部系统]
+
+    SESSION <-->|持久化 / 恢复| STATE[(Session / Checkpoint Store)]
+    MEMORY <-->|召回 / 写入 / 更新 / 遗忘| CDB[ContextDB / Long-term Memory Service]
+    CONNECT -.可选管理或诊断接口.-> CDB
+    STATE -.可选使用 Postgres.-> NEON
+    CDB -.可选以 Postgres + pgvector 持久化.-> NEON
+```
+
+阅读这张图时要注意四个边界：
+
+- Agent Runtime 通过 Model Adapter 调用模型服务；KV Cache位于模型推理侧，不是Agent长期记忆。
+- MCP/API/SDK/CLI是连接方式，文件系统、数据库和外部系统才是实际资源。
+- Hook/Middleware是生命周期扩展机制，Guard、Permission和Approval是控制策略。
+- Session/Checkpoint保存当前任务状态，ContextDB保存跨会话的长期记忆。
 
