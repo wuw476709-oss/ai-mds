@@ -1,6 +1,6 @@
 # Agent 开发实战学习与机会探索方案
 
-> 课程定位：以 Agent 开发实战为主线，通过学习和解剖 DSH、Codex 等完整 Agent 工具，系统掌握 Agent 的核心机制；结合 Neon、ContextDB 开展综合实践，并在学习过程中观察数据库、缓存和存储相关的新机会。
+> 课程定位：以 Agent 开发实战为主线，通过学习和解剖 Pi、DSH、Deep Agents、Codex 等不同风格的 Agent Harness，系统掌握 Agent 的核心机制；结合 Neon、ContextDB 开展综合实践，并在学习过程中观察数据库、缓存和存储相关的新机会。
 
 ## 1. 课程目标
 
@@ -15,7 +15,7 @@
 - 掌握 Session、Context、Memory、Checkpoint 和任务恢复。
 - 理解 Subagent、多 Agent、Human-in-the-loop 和权限控制。
 - 掌握 Agent 的可观测、评测、安全和生产化方法。
-- 能够阅读 DSH、Codex 等完整 Agent 工具的架构和关键实现。
+- 能够阅读 Pi、DSH、Deep Agents、Codex 等 Agent Harness 的架构和关键实现。
 
 ### 1.2 实践目标
 
@@ -501,25 +501,122 @@ flowchart LR
 
 ---
 
-## 16. DSH 与 Codex 的学习方式
+## 16. Pi、DSH、Deep Agents 与 Codex 的学习方式
 
-DSH、Codex 作为课程中的“解剖对象”和“实践平台”，不单独变成产品功能介绍课。
+四者都可以看作将大模型变成可执行任务 Agent 的 Harness，但设计取向不同。课程不把它们拆成四门产品介绍课，而是围绕相同机制横向比较。
 
-| 观察对象 | 重点学习内容 |
-|---|---|
-| DSH | Agent Loop、Plugin、事件、Session、Tool、Skill、Subagent、状态与恢复 |
-| Codex | AGENTS.md、Skill、MCP、Hook、Sandbox、Approval、任务和用户介入 |
+### 16.1 四者的关系
 
-统一回答：
+```text
+                         Agent Harness
+                              │
+          ┌───────────────────┼───────────────────┐
+          │                   │                   │
+      极简可组装          插件化运行时          开箱即用
+         Pi                  DSH             Deep Agents
+                                                  │
+                                           LangGraph Runtime
 
-- Agent Loop 如何运行？
-- 可以在哪些生命周期点扩展或拦截？
+                    完整产品与生产参考
+                           Codex
+```
+
+| 观察对象 | 核心定位 | 重点学习内容 |
+|---|---|---|
+| [Pi](https://github.com/earendil-works/pi) | 极简、可扩展的 Agent Harness | 最小 Agent Loop、模型接口、Tool、Context、Session、Compaction、Extension |
+| [DSH](https://github.com/deepseek-ai/deepseek-harness) | Everything-is-a-plugin 的 Agent Harness | Plugin、Hook、Typed Event、Session Log、运行时组合与生命周期 |
+| [Deep Agents](https://github.com/langchain-ai/deepagents) | 基于 LangGraph 的开箱即用 Agent Harness | Planning、Filesystem、Subagent、Middleware、Checkpoint、长任务 |
+| [Codex](https://developers.openai.com/blog/codex-as-a-platform) | 完整编码 Agent 产品与平台 | Skill、MCP、Hook、Sandbox、Approval、多Agent、Artifact和生产体验 |
+
+可以用一句话记忆：
+
+> Pi 看最小内核，DSH 看插件化架构，Deep Agents 看复杂能力组合，Codex 看生产级完整形态。
+
+### 16.2 为什么同时观察四个系统
+
+- 只看 Pi，容易理解内核，但不容易看到完整生产能力。
+- 只看 DSH，容易理解插件体系，但可能忽略更简单的最小实现。
+- 只看 Deep Agents，容易快速搭建复杂 Agent，但可能被高层封装遮住底层循环。
+- 只看 Codex，容易看到成熟体验，但不一定能完整拆解所有内部实现。
+- 横向比较可以区分“Agent 必需机制”和“某个框架的特定设计”。
+
+### 16.3 推荐学习顺序
+
+#### 第一步：用 Pi 看懂最小 Agent
+
+重点跟踪：
+
+- 一次模型请求如何产生 Tool Call。
+- 工具结果如何重新进入消息上下文。
+- Agent Loop 如何继续和停止。
+- Session 如何保存、分支和压缩。
+- Tool、Skill 和 Extension 如何加载。
+
+实践：运行 Pi 完成一个简单代码或文件任务，再阅读 Agent Core、Session 和 Tool 的关键调用链。
+
+#### 第二步：用 DSH 理解运行时扩展
+
+重点跟踪：
+
+- Agent Loop、Model Adapter、Tool Registry 和 Session Log 如何作为插件组合。
+- 生命周期事件和 Hook 如何观察或拦截运行过程。
+- 插件如何注册服务、事件和可逆副作用。
+- Agent 状态如何被不同插件共享。
+
+实践：编写一个最小插件或 Hook，记录工具调用并拦截危险操作。
+
+#### 第三步：用 Deep Agents 理解复杂任务编排
+
+重点跟踪：
+
+- Planning 如何影响执行过程。
+- Filesystem 如何作为 Agent 的外部工作空间。
+- Subagent 如何隔离上下文和委派任务。
+- Middleware、Graph State、Checkpoint 和 Recovery 如何协作。
+
+实践：构建一个研究或数据库分析 Agent，使用 Planning 和两个 Subagent 完成长任务。
+
+#### 第四步：用 Codex 观察生产级 Agent
+
+重点跟踪：
+
+- AGENTS.md、Skill、MCP 和 Hook 如何组合。
+- Sandbox、权限和 Approval 如何控制副作用。
+- 用户如何 Steering、暂停、继续和取消任务。
+- 多 Agent、Artifact、Trace 和最终验证如何形成完整体验。
+
+实践：使用相同任务在 Codex 中完成一次端到端执行，记录它在安全、交互和结果交付方面的设计。
+
+### 16.4 统一横向问题
+
+观察每个系统时统一回答：
+
+- Agent Loop 如何运行和停止？
+- Context 如何组装、压缩和恢复？
 - 工具如何注册、授权、调用和处理错误？
-- Session 和状态如何保存与恢复？
-- Skill、Hook、MCP 和 Plugin 如何分工？
-- 子 Agent 如何创建、通信、等待和取消？
-- 权限、隔离、审批和审计如何实现？
-- 哪些设计可以用于我们的 Agent 和数据产品？
+- Session、事件和状态如何持久化？
+- Skill、Hook、MCP、Middleware 和 Plugin 如何分工？
+- Planning 和 Subagent 如何实现？
+- 用户如何介入、审批、修改目标和取消任务？
+- 权限、隔离、Sandbox 和审计如何实现？
+- Trace、Evaluation 和 Artifact 如何组织？
+- 哪些设计属于 Agent 的通用机制，哪些只是框架选择？
+- 哪些设计可以用于 Neon、ContextDB 或新的数据基础设施方向？
+
+### 16.5 推荐比较实验
+
+选择同一个任务，例如“分析一次数据库变更并生成验证报告”，分别使用四种 Harness 观察：
+
+- 完成任务需要多少内置能力和自定义代码。
+- Agent Loop 和中间状态是否容易观察。
+- 增加 Tool、Skill、Hook 或 Middleware 的成本。
+- Session、Checkpoint 和恢复能力。
+- Subagent 与复杂任务支持。
+- Sandbox、审批和安全边界。
+- Trace、调试、测试和部署体验。
+- Token、耗时、成功率和人工介入次数。
+
+横向实验的目的不是简单评选“最好用的框架”，而是帮助团队理解不同架构选择的取舍。
 
 ---
 
@@ -604,7 +701,7 @@ flowchart LR
 
 ### 第一阶段：建立 Agent 全局认识
 
-1. Agent 整体架构与 Agent Loop。
+1. Agent 整体架构与 Agent Loop，使用 Pi 观察最小内核。
 2. Model、Prompt 和 Context Assembly。
 3. Planning 和任务分解。
 
@@ -612,10 +709,10 @@ flowchart LR
 
 ### 第二阶段：让 Agent 能够行动
 
-4. Tool Calling。
+4. Tool Calling，并使用 Pi、DSH 比较工具注册与执行。
 5. MCP。
 6. Skills、AGENTS.md。
-7. Hooks、Guard 和 Approval。
+7. Hooks、Guard 和 Approval，重点观察 DSH 与 Codex。
 
 阶段成果：能够通过 MCP 安全访问外部系统的 Agent。
 
@@ -623,7 +720,7 @@ flowchart LR
 
 8. Session、State、Checkpoint 和 Recovery。
 9. Memory、RAG 和 ContextDB。
-10. Subagent 和多 Agent。
+10. Subagent 和多 Agent，重点观察 Deep Agents 与 Codex。
 
 阶段成果：可恢复、有长期记忆、能够委派任务的 Agent。
 
@@ -643,7 +740,7 @@ flowchart LR
 
 1. **学习目标**：这节课要搞清楚什么？
 2. **机制原理**：它在 Agent 中处于什么位置？
-3. **真实实现**：DSH、Codex 或其他系统如何实现？
+3. **真实实现**：Pi、DSH、Deep Agents、Codex 中至少一个系统如何实现？
 4. **动手实验**：做了什么，结果如何？
 5. **项目结合**：如何用于 Neon、ContextDB 或综合 Agent？
 6. **延伸观察**：是否产生新的数据基础设施机会？
@@ -686,7 +783,7 @@ flowchart LR
 
 1. Agent 整体架构图和术语表。
 2. 一套完整、详略得当的 Agent 开发课程。
-3. DSH、Codex 关键机制和源码入口分析。
+3. Pi、DSH、Deep Agents、Codex 的关键机制和源码入口对比。
 4. 各课程的最小可运行 Demo。
 5. Neon × ContextDB 数据库研发 Agent。
 6. Agent 固定测试集和评测基线。
@@ -697,5 +794,5 @@ flowchart LR
 
 ## 23. 向领导汇报的建议表述
 
-> 我计划以“Agent开发实战”为主线，先建立完整的 Agent 机制图，再把 Agent Loop、Planning、Tool、MCP、Skill、Hook、Session、Memory、多 Agent、安全和评测等内容拆成专题，由团队成员分头学习和动手验证。DSH、Codex 会作为主要解剖对象，但课程不会停留在工具使用层面，每个专题都需要有原理、真实实现和可运行 Demo。实践上会结合我们正在做的 Neon、ContextDB，最终完成一个数据库研发 Agent，把各模块串起来。在学习过程中，我们也会观察 Agent 对数据库、缓存和存储提出的新需求；Neon、ContextDB 是优先结合方向，但如果发现其他有价值的机会，也会记录并提出验证方案。这样既能让团队真正搞清楚 Agent 机制，也能把学习结果转化为项目能力和新的机会判断。
+> 我计划以“Agent开发实战”为主线，先建立完整的 Agent 机制图，再把 Agent Loop、Planning、Tool、MCP、Skill、Hook、Session、Memory、多 Agent、安全和评测等内容拆成专题，由团队成员分头学习和动手验证。课程会选择四种不同风格的 Agent Harness 进行对照：用 Pi 看懂最小内核，用 DSH 理解插件化和生命周期扩展，用 Deep Agents 学习 Planning、Subagent 和持久状态，用 Codex 观察 Sandbox、Approval、Skill、MCP 等生产级完整形态。每个专题都需要有原理、真实实现和可运行 Demo。实践上会结合我们正在做的 Neon、ContextDB，最终完成一个数据库研发 Agent，把各模块串起来。在学习过程中，我们也会观察 Agent 对数据库、缓存和存储提出的新需求；Neon、ContextDB 是优先结合方向，但如果发现其他有价值的机会，也会记录并提出验证方案。这样既能让团队真正搞清楚 Agent 机制，也能把学习结果转化为项目能力和新的机会判断。
 
