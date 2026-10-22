@@ -71,17 +71,26 @@ flowchart TB
 
         RULES[AGENTS.md / Skills] -.提供规则和工作方法.-> PLAN
         SESSION[Session / State / Checkpoint] -.保存运行状态.-> CONTEXT
-        MEMORY[Long-term Memory] -.召回与沉淀.-> CONTEXT
+        MEMORY[Memory Manager / Policy] -.召回结果进入上下文.-> CONTEXT
         HOOK[Lifecycle Hooks] -.监听和干预.-> TOOL
+        HOOK -.触发记忆召回与写入.-> MEMORY
         TRACE[Trace / Evaluation] -.记录和评价.-> RUNTIME
         SANDBOX[Sandbox / Security] -.限制执行边界.-> EXEC
     end
 
     EXEC --> MCP[MCP / API / CLI / Filesystem]
     MCP --> NEON[Neon / 业务数据库]
-    MCP --> CDB[ContextDB]
     MCP --> EXT[代码仓库及其他系统]
+    MEMORY <-->|召回 / 写入 / 更新 / 遗忘| CDB[ContextDB / Long-term Memory Store]
+    MCP -.可选管理或工具接口.-> CDB
 ```
+
+图中的 Memory 分成两层：
+
+- **Memory Manager / Policy** 位于 Agent Runtime 内，负责决定记什么、何时召回、如何过滤、何时更新或遗忘。
+- **ContextDB** 位于 Runtime 外部，作为 Agent 的长期记忆存储与检索后端，负责持久化、检索、时间语义、隔离和治理。
+
+典型流程是在模型推理前由 Hook/Middleware 触发召回，将经过过滤的记忆交给 Context Assembly；在任务或Turn结束后提取候选记忆，经策略判断后写入ContextDB。ContextDB可以通过SDK、API或Memory Adapter接入；MCP可以作为可选的管理或工具接口，但不是ContextDB在Agent架构中的唯一位置。
 
 Agent 最核心的运行闭环是：
 
@@ -331,8 +340,10 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 
 1. 接入一个只读 MCP Server。
 2. 编写一个包含健康检查和查询工具的最小 MCP Server。
-3. 将 Neon 或 ContextDB 的部分能力封装为 MCP 工具。
+3. 将 Neon 能力封装为 MCP 工具；ContextDB的管理、解释或诊断能力也可以选择通过MCP暴露。
 4. 对比 API 直连与 MCP 接入的开发、复用和治理成本。
+
+说明：ContextDB承担长期记忆时，核心召回和写入通常由Memory Adapter、SDK/API及Hook/Middleware接入，不要求每次都由模型主动调用MCP工具。
 
 ### 学习产出
 
@@ -472,14 +483,16 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 
 ```mermaid
 flowchart LR
-    A[当前任务] --> B[生成检索条件]
+    A[当前任务] --> MM[Memory Manager / Policy]
+    MM --> B[生成检索条件]
     B --> C[ContextDB 召回]
     C --> D[相关性、时效性和权限过滤]
     D --> E[作为不可信资料注入上下文]
     E --> F[Agent 执行任务]
     F --> G[提取候选记忆]
     G --> H[价值、敏感性和冲突检查]
-    H -->|通过| I[写入或更新 ContextDB]
+    H -->|通过| W[Memory Write Policy]
+    W --> I[写入、更新或遗忘 ContextDB]
     H -->|不通过| J[丢弃]
 ```
 
@@ -735,8 +748,9 @@ flowchart LR
 ```mermaid
 flowchart LR
     U[研发人员] --> A[数据库研发 Agent]
-    A --> CDB[ContextDB]
-    CDB -->|项目规范和历史经验| A
+    A --> MM[Memory Manager / Policy]
+    MM <-->|长期记忆召回与写入| CDB[ContextDB]
+    MM -->|经过过滤的项目规范和历史经验| A
     A --> PLAN[Planning]
     PLAN --> GUARD[Hook / Guard / Approval]
     GUARD --> MCP[Neon MCP / 数据库工具]
@@ -745,7 +759,7 @@ flowchart LR
     TEST --> VERIFY[结果验证]
     VERIFY --> REPORT[报告与证据]
     REPORT --> U
-    VERIFY -->|筛选有效经验| CDB
+    VERIFY -->|候选经验| MM
     SESSION[Session / Checkpoint] -.保存状态.-> A
     TRACE[Trace / Evaluation] -.记录全过程.-> A
 ```
