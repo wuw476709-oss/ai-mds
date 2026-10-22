@@ -141,9 +141,33 @@ Agent 最核心的运行闭环是：
 | Plugin / Extension | 插件发现、加载、隔离和兼容 | 编写最小插件 |
 | Failure Handling | 模型、工具、进程和节点错误处理 | 故障注入实验 |
 
+### 3.4 课程与学习资源对应表
+
+| 课程 | 必读/必看 | 动手参考 | 课程作业 |
+|---|---|---|---|
+| 课程一：Agent Loop | [Hugging Face Unit 1](https://huggingface.co/learn/agents-course/en/unit1/introduction)、[How Pi Works](https://pi.dev/docs/latest/how-pi-works) | [OpenAI Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/) | 两工具最小Agent和Loop时序图 |
+| 课程二：Model与Context | [How Pi Works](https://pi.dev/docs/latest/how-pi-works)、[Deep Agents课程Module 3](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | [Agents SDK Sessions](https://openai.github.io/openai-agents-python/sessions/) | 四种Context策略对比 |
+| 课程三：Planning | [Deep Agents Overview](https://docs.langchain.com/oss/python/deepagents/overview) | [Deep Agents官方课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | 数据库任务规划与动态调整 |
+| 课程四：Tool Calling | [Hugging Face Unit 1](https://huggingface.co/learn/agents-course/en/unit1/introduction)、[Pi Extensions](https://pi.dev/docs/latest/extensions) | [Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/) | 文件、SQL、状态三个工具 |
+| 课程五：MCP | [MCP Server Primitives](https://modelcontextprotocol.io/specification/draft/server/index) | [MCP Python Get Started](https://py.sdk.modelcontextprotocol.io/get-started/)、[Quickstart Resources](https://github.com/modelcontextprotocol/quickstart-resources) | 只读数据库MCP Server |
+| 课程六：Skill | [OpenAI Skills Concepts](https://developers.openai.com/plugins/concepts/skills) | [Build Skills](https://developers.openai.com/plugins/build/skills)、[Pi Documentation](https://pi.dev/docs/latest) | Neon检查Skill与ContextDB评测Skill |
+| 课程七：Hook与Guard | [Pi Extensions](https://pi.dev/docs/latest/extensions)、[DSH Architecture](https://deepseek-harness.github.io/deepseek-harness/en/reference/) | [DSH Core](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/core)、[Plugin Architecture](https://developers.openai.com/plugins/concepts/plugins) | SQL拦截、审计与Stop Hook |
+| 课程八：Session与Recovery | [How Pi Works](https://pi.dev/docs/latest/how-pi-works)、[DSH Core](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/core) | [Agents SDK Sessions](https://openai.github.io/openai-agents-python/sessions/)、[Deep Agents课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | 中断、恢复与幂等实验 |
+| 课程九：Memory与RAG | [ContextDB Documentation](https://contextdb.ai/docs)、[Agentic RAG](https://huggingface.co/learn/agents-course/en/unit3/agentic-rag/introduction) | [Deep Agents课程Module 3](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | 四种记忆方案对照实验 |
+| 课程十：Subagent | [Deep Agents课程Module 4](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | [Build a Research Agent](https://www.youtube.com/watch?v=5tn6O0uXYEg)、[Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/) | 主Agent加两个专家Agent |
+| 课程十一：安全与HITL | [Pi Security](https://pi.dev/docs/latest/security)、[MCP安全指南](https://developers.openai.com/api/docs/mcp) | [Sandbox Agents Quickstart](https://openai.github.io/openai-agents-python/sandbox_agents/)、[Deep Agents课程Module 2](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | 注入、越权与审批实验 |
+| 课程十二：Observability与Eval | [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)、[Agents SDK Usage](https://openai.github.io/openai-agents-python/usage/) | [LangChain Academy](https://academy.langchain.com/)、[Deep Agents Research视频](https://www.youtube.com/watch?v=5tn6O0uXYEg) | 10～20个测试任务和评测报告 |
+
 ---
 
 ## 4. 课程一：Agent 基础与 Agent Loop
+
+### 推荐资源
+
+- 必读：[Hugging Face Unit 1：Introduction to Agents](https://huggingface.co/learn/agents-course/en/unit1/introduction)。
+- 必读：[Pi：How Pi Works](https://pi.dev/docs/latest/how-pi-works)。
+- 动手：[OpenAI Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/)。
+- 源码：[Pi Agent Toolkit](https://github.com/earendil-works/pi)。
 
 ### 学习点
 
@@ -157,6 +181,7 @@ Agent 最核心的运行闭环是：
 
 ### 探索对象
 
+- Pi 的最小 Agent Loop、Session Tree 和 Tool Result 回灌过程。
 - DSH 的 Agent、Agent Loop、事件和状态接口。
 - Codex 的任务执行、工具调用、等待和终止过程。
 - 同步循环、异步循环与事件驱动循环。
@@ -177,6 +202,13 @@ Agent 最核心的运行闭环是：
 ---
 
 ## 5. 课程二：模型、Prompt 与 Context Assembly
+
+### 推荐资源
+
+- 必读：[Pi：How Pi Works](https://pi.dev/docs/latest/how-pi-works)，重点看Context、Session与Compaction。
+- 课程：[Deep Agents官方课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents)，重点完成Module 3 Context Management。
+- 动手：[OpenAI Agents SDK Sessions](https://openai.github.io/openai-agents-python/sessions/)。
+- 延伸：[vLLM Automatic Prefix Caching](https://docs.vllm.ai/en/latest/design/prefix_caching/)。
 
 ### 学习点
 
@@ -211,6 +243,12 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 
 ## 6. 课程三：Planning 与任务分解
 
+### 推荐资源
+
+- 必读：[Deep Agents Overview](https://docs.langchain.com/oss/python/deepagents/overview)，重点看Planning与Task Decomposition。
+- 课程：[Introduction to Deep Agents](https://academy.langchain.com/courses/foundation-introduction-to-deepagents)，重点完成Module 1和Module 4。
+- 视频：[What are Deep Agents?](https://www.youtube.com/watch?v=IVts6ztrkFg)。
+
 ### 学习点
 
 - ReAct、Plan-and-Execute 等执行方式。
@@ -235,6 +273,13 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 ---
 
 ## 7. 课程四：Tool Calling
+
+### 推荐资源
+
+- 基础：[Hugging Face Unit 1](https://huggingface.co/learn/agents-course/en/unit1/introduction)，重点看Tools与Action/Observation。
+- 动手：[OpenAI Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/)，重点看Function Tool。
+- 扩展：[Pi Extensions](https://pi.dev/docs/latest/extensions)，重点看Tool注册、`tool_call`和`tool_result`事件。
+- 源码：[DSH Core](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/core)，重点看Tool Registry和执行Pipeline。
 
 ### 学习点
 
@@ -265,6 +310,14 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 
 ## 8. 课程五：MCP 与外部系统集成
 
+### 推荐资源
+
+- 概念：[MCP Server Primitives](https://modelcontextprotocol.io/specification/draft/server/index)。
+- 动手：[MCP Python SDK Get Started](https://py.sdk.modelcontextprotocol.io/get-started/)。
+- 示例：[MCP Quickstart Resources](https://github.com/modelcontextprotocol/quickstart-resources)。
+- 安全：[Building MCP Servers](https://developers.openai.com/api/docs/mcp)。
+- 项目参考：[Connect MCP Clients to Neon](https://neon.com/guides/neon-mcp-server-github-copilot-vs-code)。
+
 ### 学习点
 
 - MCP Server、Client、Tool、Resource 和 Prompt。
@@ -290,6 +343,13 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 ---
 
 ## 9. 课程六：Skills、AGENTS.md 与可复用工作流
+
+### 推荐资源
+
+- 必读：[OpenAI Skills Concepts](https://developers.openai.com/plugins/concepts/skills)。
+- 动手：[Build Skills](https://developers.openai.com/plugins/build/skills)。
+- 对比：[Pi Documentation](https://pi.dev/docs/latest)，重点看Skills、Prompt Templates和Extensions的选择边界。
+- 项目参考：[Neon Agent Skills](https://neon.com/docs/ai/ai-rules-neon-toolkit)。
 
 ### 学习点
 
@@ -318,6 +378,13 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 ---
 
 ## 10. 课程七：Hook、Event、Guard 与 Approval
+
+### 推荐资源
+
+- 动手：[Pi Extensions](https://pi.dev/docs/latest/extensions)，重点看生命周期事件、Tool Gate和Context Transformation。
+- 架构：[DSH Architecture](https://deepseek-harness.github.io/deepseek-harness/en/reference/)，重点看Events和Turn Flow。
+- 源码：[DSH Core](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/core)。
+- 生产参考：[OpenAI Plugin Architecture](https://developers.openai.com/plugins/concepts/plugins)。
 
 ### 学习点
 
@@ -350,6 +417,13 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 
 ## 11. 课程八：Session、State、Checkpoint 与 Recovery
 
+### 推荐资源
+
+- 必读：[Pi：How Pi Works](https://pi.dev/docs/latest/how-pi-works)，重点看Session Tree、Branch和Compaction。
+- 必读：[DSH Core](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/core)，重点看Session Event Log。
+- 动手：[OpenAI Agents SDK Sessions](https://openai.github.io/openai-agents-python/sessions/)。
+- 课程：[Deep Agents官方课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents)，重点看Threads、Checkpointers和HITL。
+
 ### 学习点
 
 - Session 保存消息、事件还是完整运行状态。
@@ -376,6 +450,13 @@ KV Cache 不作为 Agent 主课程的中心，但作为理解“长上下文如�
 ---
 
 ## 12. 课程九：Memory、RAG 与 ContextDB
+
+### 推荐资源
+
+- 项目必读：[ContextDB Documentation](https://contextdb.ai/docs)。
+- 基础课程：[Hugging Face Agentic RAG](https://huggingface.co/learn/agents-course/en/unit3/agentic-rag/introduction)。
+- 深入课程：[Deep Agents官方课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents)，重点完成Module 3。
+- 边界参考：[OpenAI Agents SDK Sessions](https://openai.github.io/openai-agents-python/sessions/)，用于区分Session History和长期Memory。
 
 ### 学习点
 
@@ -417,6 +498,13 @@ flowchart LR
 
 ## 13. 课程十：Subagent 与多 Agent
 
+### 推荐资源
+
+- 课程：[Deep Agents官方课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents)，重点完成Module 4 Delegation。
+- 视频：[Build a Research Agent with Deep Agents](https://www.youtube.com/watch?v=5tn6O0uXYEg)。
+- 动手：[OpenAI Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/)，重点看Handoff和Agents as Tools。
+- 产品观察：[Codex as a Platform](https://developers.openai.com/blog/codex-as-a-platform)。
+
 ### 学习点
 
 - 为什么使用子 Agent，而不是扩大单 Agent 上下文。
@@ -441,6 +529,13 @@ flowchart LR
 ---
 
 ## 14. 课程十一：安全、Sandbox 与 Human-in-the-loop
+
+### 推荐资源
+
+- 必读：[Pi Security](https://pi.dev/docs/latest/security)，理解本地Agent的信任边界。
+- 动手：[OpenAI Sandbox Agents Quickstart](https://openai.github.io/openai-agents-python/sandbox_agents/)。
+- MCP安全：[Building MCP Servers](https://developers.openai.com/api/docs/mcp)。
+- 课程：[Deep Agents官方课程](https://academy.langchain.com/courses/foundation-introduction-to-deepagents)，重点看Module 1 HITL和Module 2 Sandbox。
 
 ### 学习点
 
@@ -470,6 +565,13 @@ flowchart LR
 ---
 
 ## 15. 课程十二：Observability、Evaluation 与生产化
+
+### 推荐资源
+
+- 总览：[OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)，重点看Tracing、Guardrails和Sessions。
+- 成本：[Agents SDK Usage](https://openai.github.io/openai-agents-python/usage/)。
+- 课程入口：[LangChain Academy](https://academy.langchain.com/)，建议学习LangSmith Essentials。
+- 视频案例：[Build a Research Agent with Deep Agents](https://www.youtube.com/watch?v=5tn6O0uXYEg)，重点观察LangSmith Trace和部署部分。
 
 ### 学习点
 
