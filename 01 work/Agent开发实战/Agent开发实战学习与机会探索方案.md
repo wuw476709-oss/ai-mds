@@ -49,48 +49,91 @@ flowchart TB
     U[用户 / 上游系统] --> INPUT[任务输入]
 
     subgraph RUNTIME[Agent Runtime]
-        INPUT --> UNDERSTAND[任务理解]
-        UNDERSTAND --> PLAN[Planning / 任务分解]
+        INPUT --> LOOP[Agent Loop / Orchestrator]
+        LOOP --> PLAN[任务理解与 Planning]
         PLAN --> CONTEXT[Context Assembly]
-        CONTEXT --> MODEL[大模型推理]
-        MODEL --> DECIDE{下一步决策}
+        CONTEXT --> MODEL[Model Adapter / Router]
+        MODEL --> DECIDE{模型决策}
 
-        DECIDE -->|调用工具| TOOL[Tool Calling]
+        DECIDE -->|调用工具| TOOL[Tool Registry / Calling]
         DECIDE -->|委派任务| SUB[Subagent]
-        DECIDE -->|需要信息| HUMAN[用户输入 / 审批]
-        DECIDE -->|准备完成| VERIFY[结果验证]
+        DECIDE -->|请求信息| ASK[向用户提问]
+        DECIDE -->|候选结果| VERIFY[结果与证据验证]
 
-        TOOL --> GUARD[Hook / Guard / Permission]
-        GUARD --> EXEC[执行工具]
+        TOOL --> GUARD[Policy / Guard / Permission]
+        GUARD -->|必要时| APPROVAL[Human Approval]
+        GUARD -->|允许| EXEC[Tool Executor]
+        APPROVAL -->|批准| EXEC
         EXEC --> OBSERVE[观察结果]
         SUB --> OBSERVE
-        HUMAN --> CONTEXT
-        OBSERVE --> CONTEXT
-        VERIFY -->|未通过| CONTEXT
+        ASK --> INPUT
+        OBSERVE --> LOOP
+        VERIFY -->|未通过| LOOP
         VERIFY -->|通过| OUTPUT[回答 / Artifact / Action]
 
-        RULES[AGENTS.md / Skills] -.提供规则和工作方法.-> PLAN
-        SESSION[Session / State / Checkpoint] -.保存运行状态.-> CONTEXT
+        RULES[Instructions / AGENTS.md / Skills] -.提供规则和工作方法.-> LOOP
+        SESSION[Session / State Manager] -.恢复状态与历史.-> LOOP
         MEMORY[Memory Manager / Policy] -.召回结果进入上下文.-> CONTEXT
-        HOOK[Lifecycle Hooks] -.监听和干预.-> TOOL
+        HOOK[Lifecycle Hooks / Middleware] -.监听和扩展生命周期.-> LOOP
+        HOOK -.拦截工具事件.-> TOOL
         HOOK -.触发记忆召回与写入.-> MEMORY
         TRACE[Trace / Evaluation] -.记录和评价.-> RUNTIME
         SANDBOX[Sandbox / Security] -.限制执行边界.-> EXEC
     end
 
-    EXEC --> MCP[MCP / API / CLI / Filesystem]
-    MCP --> NEON[Neon / 业务数据库]
-    MCP --> EXT[代码仓库及其他系统]
-    MEMORY <-->|召回 / 写入 / 更新 / 遗忘| CDB[ContextDB / Long-term Memory Store]
-    MCP -.可选管理或工具接口.-> CDB
+    MODEL <-->|推理请求 / 响应| LLM[LLM Provider / Model Serving]
+    LLM --- KVC[KV Cache / Prefix Cache]
+
+    EXEC --> CONNECT[MCP / API / SDK / CLI Adapter]
+    EXEC --> LOCAL[Filesystem / Shell / Browser]
+    CONNECT --> NEON[Neon Backend Platform<br/>Lakebase Postgres]
+    CONNECT --> EXT[代码仓库及其他外部系统]
+
+    SESSION <-->|持久化 / 恢复| STATE[(Session / Checkpoint Store)]
+    MEMORY <-->|召回 / 写入 / 更新 / 遗忘| CDB[ContextDB / Long-term Memory Service]
+    CONNECT -.可选管理或诊断接口.-> CDB
+    STATE -.可选使用 Postgres.-> NEON
+    CDB -.可选以 Postgres + pgvector 持久化.-> NEON
 ```
 
-图中的 Memory 分成两层：
+这张图表达的是**逻辑角色**，不是要求所有模块分别部署。几个容易混淆的位置需要特别说明：
+
+- **模型不等于 Agent Runtime**：Runtime 负责循环、上下文、工具和状态管理，通过 Model Adapter 调用外部模型服务；KV Cache/Prefix Cache 位于模型推理服务侧，不是 Agent Memory。
+- **MCP/API/SDK/CLI 是连接方式，不是数据资源**：文件系统、Shell、浏览器、Neon 和代码仓库才是 Agent 实际操作的资源。MCP 只是其中一种标准化工具协议。
+- **Hook 与 Guard 不等价**：Hook/Middleware 是生命周期扩展机制；Guard、Permission 和 Approval 是其中可挂载的策略与控制能力。
+- **Session 与长期记忆不同**：Session/Checkpoint 保存当前任务的可恢复运行状态；长期 Memory 保存跨会话仍有价值的知识、偏好和经验。
+
+图中的长期 Memory 分成两层：
 
 - **Memory Manager / Policy** 位于 Agent Runtime 内，负责决定记什么、何时召回、如何过滤、何时更新或遗忘。
-- **ContextDB** 位于 Runtime 外部，作为 Agent 的长期记忆存储与检索后端，负责持久化、检索、时间语义、隔离和治理。
+- **ContextDB** 位于 Runtime 外部，作为 Agent 的长期记忆服务，负责持久化、检索、时间语义、隔离和治理。
 
 典型流程是在模型推理前由 Hook/Middleware 触发召回，将经过过滤的记忆交给 Context Assembly；在任务或Turn结束后提取候选记忆，经策略判断后写入ContextDB。ContextDB可以通过SDK、API或Memory Adapter接入；MCP可以作为可选的管理或工具接口，但不是ContextDB在Agent架构中的唯一位置。
+
+### 2.1 Neon 在图中的定义和位置
+
+按当前官方定位，**Neon 是面向应用和 Agent 的 Backend Platform**，除数据库外还包括 Auth、Object Storage、Functions 和 AI Gateway；其核心数据库是 **Lakebase Postgres（Serverless Postgres）**。本课程不泛化研究整套 Backend，而聚焦最能体现 Agent 开发实战和数据机会的 Postgres、数据库分支、MCP/API/SDK 及 pgvector 能力。Lakebase Postgres 把运行查询的计算层与保存 WAL、页面和历史数据的持久化存储层解耦，从而支持计算弹性伸缩、闲置休眠、快速恢复以及轻量的 Copy-on-Write 数据库分支。
+
+Neon 在 Agent 体系中不是 Agent 的内部模块，而是外部数据基础设施，可承担四种角色：
+
+| Neon角色 | 与Agent的关系 | 本课程中的实践 |
+|---|---|---|
+| 业务/操作数据库 | Agent 通过 SQL、Driver、API 或 MCP 查询和变更数据 | Schema分析、SQL调优、故障排查 |
+| 隔离执行环境 | Agent 为任务创建数据库分支，先试验再验证，避免直接影响主库 | Migration、危险SQL和回滚实验 |
+| Agent状态存储 | Session、Checkpoint、Trace服务可选择使用Postgres持久化 | 中断恢复、幂等和审计实验 |
+| ContextDB底层存储 | ContextDB在当前实现中可使用PostgreSQL + pgvector；Neon可作为一种部署后端 | 长期记忆、向量召回和隔离实验 |
+
+因此需要区分：**ContextDB是长期记忆的逻辑服务，Neon是可承载应用、Agent和数据能力的平台；ContextDB可以使用Neon Postgres作为底层数据库，但不能把Neon直接画成Memory，也不能把ContextDB只画成普通MCP工具。**
+
+```mermaid
+flowchart LR
+    A[Agent Runtime] -->|Memory Adapter / SDK / API| C[ContextDB<br/>长期记忆服务]
+    A -->|SQL / Driver / MCP / API| B[Neon Branch<br/>业务数据与隔离实验]
+    A -->|状态服务| S[Session / Checkpoint Service]
+    C -.可选持久化后端.-> N[(Neon Postgres + pgvector)]
+    S -.可选持久化后端.-> N
+    B --> N
+```
 
 Agent 最核心的运行闭环是：
 
@@ -741,7 +784,7 @@ flowchart LR
 
 ### 17.1 场景
 
-> 用户提出数据库变更、性能分析或故障排查任务。Agent 从 ContextDB 召回项目规范和历史经验，通过 MCP 创建或访问 Neon 隔离环境，生成计划并执行操作。Hook/Guard 在关键操作前进行检查，Agent 完成测试和结果验证后输出报告，再将经过筛选的新经验写回 ContextDB。
+> 用户提出数据库变更、性能分析或故障排查任务。Agent 通过 Memory Adapter 从 ContextDB 召回项目规范和历史经验，通过 Neon MCP/API 创建数据库分支，再通过 SQL/Driver 在隔离环境执行操作。Hook、Guard 和 Approval 在关键节点检查或拦截，Agent 完成测试和结果验证后输出报告，再将经过筛选的新经验写回 ContextDB。
 
 ### 17.2 架构
 
@@ -749,12 +792,14 @@ flowchart LR
 flowchart LR
     U[研发人员] --> A[数据库研发 Agent]
     A --> MM[Memory Manager / Policy]
-    MM <-->|长期记忆召回与写入| CDB[ContextDB]
+    MM <-->|Memory Adapter / SDK / API| CDB[ContextDB<br/>长期记忆服务]
     MM -->|经过过滤的项目规范和历史经验| A
     A --> PLAN[Planning]
     PLAN --> GUARD[Hook / Guard / Approval]
-    GUARD --> MCP[Neon MCP / 数据库工具]
-    MCP --> BRANCH[隔离数据库环境]
+    GUARD --> CONTROL[Neon MCP / Platform API]
+    CONTROL -->|创建 / 删除 / 重置| BRANCH[Neon隔离数据库分支]
+    GUARD --> DATA[SQL / Driver工具]
+    DATA --> BRANCH
     BRANCH --> TEST[迁移、查询和测试]
     TEST --> VERIFY[结果验证]
     VERIFY --> REPORT[报告与证据]
@@ -762,6 +807,8 @@ flowchart LR
     VERIFY -->|候选经验| MM
     SESSION[Session / Checkpoint] -.保存状态.-> A
     TRACE[Trace / Evaluation] -.记录全过程.-> A
+    CDB -.可选使用Postgres + pgvector.-> NEON[(Neon Postgres<br/>Memory / State Backend)]
+    SESSION -.可选持久化.-> NEON
 ```
 
 ### 17.3 覆盖的课程机制
@@ -953,12 +1000,16 @@ LangChain Academy课程已经覆盖本方案中大部分复杂Agent主题，可�
 
 | 类型 | 推荐资源 | 重点内容 |
 |---|---|---|
+| Neon产品定位 | [Neon](https://neon.com/) | 面向应用和Agent的Backend Platform，以及数据库、Auth、Storage、Functions和AI Gateway边界 |
+| Neon架构 | [Neon Architecture Overview](https://neon.com/docs/introduction/architecture-overview) | Postgres计算层、持久化存储层、WAL和资源层级 |
+| 数据库分支 | [Neon Branching](https://neon.com/docs/introduction/branching) | Copy-on-Write分支、隔离环境和Agent安全试错 |
+| 向量存储 | [Neon pgvector](https://neon.com/docs/extensions/pgvector) | ContextDB候选持久化后端与向量检索能力 |
 | Neon Agent Skills | [Neon Agent Skills](https://neon.com/docs/ai/ai-rules-neon-toolkit) | 数据库连接、平台API、Skill与开发助手集成 |
 | Neon MCP | [Connect MCP Clients to Neon](https://neon.com/guides/neon-mcp-server-github-copilot-vs-code) | MCP配置、OAuth、API Key和Agent接入 |
 | Neon Agent API | [Neon API for AI Agents](https://api-docs.neon.tech/reference/ai-agents) | 面向Agent的平台操作接口 |
 | SQL Agent案例 | [LangChain SQL Agent Tutorial](https://docs.langchain.com/oss/python/learn) | SQL Agent与Human-in-the-loop模式 |
 
-配套作业：实现一个数据库研发Agent，能够读取Schema、生成变更计划、在隔离环境验证、拦截危险SQL并输出证据。
+配套作业：先画出Neon计算与存储分离、项目/分支/计算端点之间的关系；再实现一个数据库研发Agent，能够读取Schema、生成变更计划、为任务创建独立分支、在隔离环境验证、拦截危险SQL并输出证据。加分实验是让ContextDB或Session Store使用Neon Postgres持久化，但必须在代码和图中保持“长期记忆服务”与“底层数据库”两个逻辑层次。
 
 ### 19.9 KV Cache延伸资源
 
