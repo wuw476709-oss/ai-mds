@@ -697,7 +697,190 @@ flowchart LR
 
 ---
 
-## 19. 课程安排建议
+## 19. 推荐课程与学习资源
+
+本节不是资料汇总，而是一条建议的实际学习路径。资料优先选择官方课程、官方文档和源码；每组资料都需要配套动手实验，避免只看视频或只读文档。链接核对时间为2026年10月22日，正式开课前由牵头人再检查一次版本和可访问性。
+
+### 19.1 入门预习：建立 Agent 基本概念
+
+| 类型 | 推荐资源 | 重点内容 | 建议投入 |
+|---|---|---|---:|
+| 系统课程 | [Hugging Face Agents Course](https://huggingface.co/learn/agents-course/en/unit0/introduction) | Agent基本概念、Messages、Tools、Thought-Action-Observation、框架和Agentic RAG | 4～6小时 |
+| 核心单元 | [Unit 1：Introduction to Agents](https://huggingface.co/learn/agents-course/en/unit1/introduction) | Agent与普通LLM的区别、工具、ReAct循环、最小Agent | 2～3小时 |
+| SDK入门 | [OpenAI Agents SDK Quickstart](https://openai.github.io/openai-agents-python/quickstart/) | Agent、Runner、Function Tool、Handoff、Trace | 1～2小时 |
+
+建议先完成 Hugging Face Unit 1，不要求一开始学完整门课程。它适合统一团队术语；OpenAI Agents SDK Quickstart用于用少量Python代码完成第一个Agent。
+
+配套作业：
+
+1. 用不超过200行代码实现一个最小Agent。
+2. 至少包含两个工具和一次连续工具调用。
+3. 画出该Agent的Thought/Decision—Action—Observation流程。
+4. 记录模型请求次数、工具调用次数和最终停止原因。
+
+### 19.2 第一站：Pi——看懂最小 Agent Harness
+
+| 类型 | 推荐资源 | 重点内容 |
+|---|---|---|
+| 总览 | [Pi Documentation](https://pi.dev/docs/latest) | 安装、会话、模型、配置和扩展入口 |
+| 必读 | [How Pi Works](https://pi.dev/docs/latest/how-pi-works) | Agent Loop、Context、Session Tree、Compaction、Interfaces |
+| 动手 | [Pi SDK](https://pi.dev/docs/latest/sdk) | 创建AgentSession、事件流、Tool、Session和嵌入应用 |
+| 扩展 | [Pi Extensions](https://pi.dev/docs/latest/extensions) | Tool、Command、事件、上下文变换和生命周期 |
+| 源码 | [earendil-works/pi](https://github.com/earendil-works/pi) | Agent Core、Coding Agent、Session与Extension实现 |
+
+建议学习顺序：
+
+1. 阅读“How Pi Works”，自己重画 Agent Loop。
+2. 使用 Pi CLI 完成一次文件分析和修改任务。
+3. 使用SDK创建最小AgentSession并监听事件。
+4. 编写一个Extension：记录工具调用，或在危险命令前请求确认。
+5. 阅读Agent Core和Session相关源码，找到消息如何进入下一轮模型请求。
+
+配套作业：输出《Pi最小Agent调用链》，回答模型请求、Tool Call、Tool Result、Session和Compaction如何连接。
+
+### 19.3 第二站：DSH——学习插件化 Agent Runtime
+
+| 类型 | 推荐资源 | 重点内容 |
+|---|---|---|
+| 快速开始 | [DSH Quickstart](https://deepseek-harness.github.io/deepseek-harness/en/guide/quickstart) | 启动Web UI、模型配置和基本使用 |
+| SDK实践 | [DSH Python SDK Tutorial](https://deepseek-harness.github.io/deepseek-harness/en/guide/python-sdk) | 最小Profile、SDK启动和自定义配置 |
+| 架构必读 | [DeepSeek Harness Architecture](https://deepseek-harness.github.io/deepseek-harness/en/reference/) | Everything-is-a-plugin、Profile、Bundle、事件和Turn Flow |
+| 子系统索引 | [DSH Subsystems](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/) | Core、Session、LLM、Tool等子系统 |
+| Core详解 | [DSH Core](https://deepseek-harness.github.io/deepseek-harness/en/reference/subsystems/core) | Agent Loop、Session Event、System Prompt和Tool Registry |
+| 源码 | [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) | Plugin、Agent Loop、Session和Tool源码 |
+
+建议学习顺序：
+
+1. 跑通Quickstart或Python SDK最小示例。
+2. 阅读Architecture中的Core Packages、Events和Turn Flow。
+3. 对照源码找到一次Turn和Step产生的持久事件。
+4. 编写一个最小Plugin或Hook，记录Tool Call与Tool Result。
+5. 增加Pre Tool Guard，拦截一个危险SQL或命令。
+
+配套作业：输出《DSH插件树和事件流》，说明哪些数据进入持久Session Log，哪些只是运行时事件。
+
+### 19.4 第三站：Deep Agents——学习复杂任务编排
+
+| 类型 | 推荐资源 | 重点内容 | 建议投入 |
+|---|---|---|---:|
+| 官方免费课程 | [Introduction to Deep Agents](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | Agent、Tool、MCP、Checkpoint、HITL、Filesystem、Sandbox、Context、Memory、Subagent | 6～10小时 |
+| 文档 | [Deep Agents Overview](https://docs.langchain.com/oss/python/deepagents/overview) | Planning、Filesystem、Subagent、Long-term Memory和权限 |
+| 视频概览 | [What are Deep Agents?](https://www.youtube.com/watch?v=IVts6ztrkFg) | Planning、Filesystem、Subagent和详细Prompt四个核心要素 |
+| 视频实战 | [Build a Research Agent with Deep Agents](https://www.youtube.com/watch?v=5tn6O0uXYEg) | Research Agent、Middleware、Subagent、Filesystem和LangSmith Trace |
+| 源码 | [langchain-ai/deepagents](https://github.com/langchain-ai/deepagents) | Harness默认能力和LangGraph集成 |
+
+LangChain Academy课程已经覆盖本方案中大部分复杂Agent主题，可以作为团队最完整的一门外部课程。建议重点完成：
+
+- Module 1：Agent、Tool、MCP、Thread、Checkpointer、HITL。
+- Module 2：Execution Environment、Filesystem、Sandbox。
+- Module 3：Context、Summarization、Skills、Memory。
+- Module 4：Delegation和Subagent Team。
+- Module 5：综合项目和异步Subagent。
+
+配套作业：实现一个“数据库方案研究Agent”，由主Agent规划任务，分别委派数据库专家和风险评审Agent，再汇总报告。
+
+### 19.5 第四站：Codex——观察生产级 Agent 能力
+
+| 类型 | 推荐资源 | 重点内容 |
+|---|---|---|
+| 平台架构 | [Codex as a Platform](https://developers.openai.com/blog/codex-as-a-platform) | Harness、SDK、App Server、Sandbox和应用集成 |
+| Agent API | [Agents API Overview](https://developers.openai.com/api/docs/guides/agents-api/overview) | Session、Environment、Event、Tool、MCP和持久任务 |
+| Plugin | [Plugin Architecture](https://developers.openai.com/plugins/concepts/plugins) | Skill、MCP Server、UI和Lifecycle Hook的组合 |
+| Skill | [Skills Concepts](https://developers.openai.com/plugins/concepts/skills) | Skill与MCP的边界、发现和触发 |
+| Skill实战 | [Build Skills](https://developers.openai.com/plugins/build/skills) | 创建、测试和打包Skill |
+| MCP | [OpenAI Docs MCP](https://developers.openai.com/learn/docs-mcp) | 在Codex中配置和使用MCP |
+| MCP安全 | [Building MCP Servers](https://developers.openai.com/api/docs/mcp) | 远程MCP、认证、工具安全和Prompt Injection |
+| Sandbox | [Agents SDK Sandbox Quickstart](https://openai.github.io/openai-agents-python/sandbox_agents/) | Workspace、Manifest、Capability、Snapshot和恢复 |
+
+建议使用Codex完成以下观察任务：
+
+1. 使用AGENTS.md设置项目规则。
+2. 编写并触发一个数据库检查Skill。
+3. 接入一个只读MCP工具。
+4. 对有副作用操作观察Approval流程。
+5. 记录Sandbox、Tool、Subagent、Artifact和最终验证的完整过程。
+
+配套作业：输出《Codex生产能力检查表》，并与Pi、DSH、Deep Agents进行横向比较。
+
+### 19.6 MCP专题资源
+
+| 类型 | 推荐资源 | 适用任务 |
+|---|---|---|
+| 官方Python教程 | [MCP Python SDK Get Started](https://py.sdk.modelcontextprotocol.io/get-started/) | 从零编写、测试和连接MCP Server |
+| 官方示例 | [MCP Quickstart Resources](https://github.com/modelcontextprotocol/quickstart-resources) | 多语言Server和Client示例 |
+| 协议概念 | [MCP Server Primitives](https://modelcontextprotocol.io/specification/draft/server/index) | Tool、Resource、Prompt及能力协商 |
+| OpenAI接入 | [MCP Server Quickstart](https://developers.openai.com/plugins/build/app-quickstart) | 使用Node/Python MCP SDK暴露服务 |
+| 数据安全 | [Building MCP Servers](https://developers.openai.com/api/docs/mcp) | 认证、授权、只读工具和注入防护 |
+
+配套作业：实现一个只读数据库MCP Server，至少提供：
+
+- 获取数据库Schema。
+- 执行受限查询。
+- 查询任务状态。
+- 结构化错误返回。
+- 工具调用审计。
+
+第二阶段再增加写操作、Dry Run、审批和幂等键。
+
+### 19.7 ContextDB 与 Memory专题资源
+
+| 类型 | 推荐资源 | 重点内容 |
+|---|---|---|
+| ContextDB文档 | [ContextDB Documentation](https://contextdb.ai/docs) | Memory写入、召回、隔离、验证和Agent集成 |
+| Deep Agents课程 | [Context Management模块](https://academy.langchain.com/courses/foundation-introduction-to-deepagents) | Summarization、Offload、Skills和Memory |
+| OpenAI Session | [Agents SDK Sessions](https://openai.github.io/openai-agents-python/sessions/) | Session History与长期Memory的边界 |
+| Hugging Face课程 | [Agentic RAG](https://huggingface.co/learn/agents-course/en/unit3/agentic-rag/introduction) | Agent如何主动检索和使用知识 |
+
+配套作业：使用同一组任务比较无记忆、全量历史、普通向量检索和ContextDB，测量任务成功率、召回准确率、token和错误记忆采用率。
+
+### 19.8 Neon 与 Agent数据库专题资源
+
+| 类型 | 推荐资源 | 重点内容 |
+|---|---|---|
+| Neon Agent Skills | [Neon Agent Skills](https://neon.com/docs/ai/ai-rules-neon-toolkit) | 数据库连接、平台API、Skill与开发助手集成 |
+| Neon MCP | [Connect MCP Clients to Neon](https://neon.com/guides/neon-mcp-server-github-copilot-vs-code) | MCP配置、OAuth、API Key和Agent接入 |
+| Neon Agent API | [Neon API for AI Agents](https://api-docs.neon.tech/reference/ai-agents) | 面向Agent的平台操作接口 |
+| SQL Agent案例 | [LangChain SQL Agent Tutorial](https://docs.langchain.com/oss/python/learn) | SQL Agent与Human-in-the-loop模式 |
+
+配套作业：实现一个数据库研发Agent，能够读取Schema、生成变更计划、在隔离环境验证、拦截危险SQL并输出证据。
+
+### 19.9 KV Cache延伸资源
+
+KV Cache是从长上下文和推理成本延伸出的专题，不占用Agent主课程的大部分时间。
+
+| 类型 | 推荐资源 | 重点内容 |
+|---|---|---|
+| Prefix Cache | [vLLM Automatic Prefix Caching](https://docs.vllm.ai/en/latest/design/prefix_caching/) | Block Hash、Prefix复用和缓存命中 |
+| KV Offload | [vLLM KV Offloading Usage Guide](https://docs.vllm.ai/en/latest/features/kv_offloading_usage/) | CPU/二级存储Offload和Connector配置 |
+| Connector接口 | [vLLM KV Connector API](https://docs.vllm.ai/en/stable/api/vllm/distributed/kv_transfer/kv_connector/v1/base/) | KV加载、保存和传输接口 |
+| 技术报告 | [LMCache Technical Report](https://lmcache.ai/tech_report.pdf) | 外部KV Cache、Scheduler与Model Runner集成 |
+
+配套作业：改变Prompt长度、复用率和并发数，测量TTFT、吞吐、显存和Cache命中率；再比较无Offload、本地Offload和远端存储。
+
+### 19.10 推荐执行版课表
+
+| 周次 | 学习主题 | 必看资源 | 实践产出 |
+|---|---|---|---|
+| 预习 | Agent基础 | Hugging Face Unit 1、Agents SDK Quickstart | 两工具最小Agent |
+| 第1周 | 最小Agent内核 | Pi How Pi Works、SDK | Agent Loop调用链 |
+| 第2周 | 插件与生命周期 | DSH Architecture、Core | Plugin/Hook Demo |
+| 第3周 | 复杂任务编排 | Deep Agents课程Module 1～4 | Planning + Subagent Demo |
+| 第4周 | Skill、MCP与安全 | Codex Plugin/Skill/MCP/Sandbox文档 | Skill + MCP + Guard Demo |
+| 第5周 | Session、Memory与数据 | ContextDB、Neon资料 | Memory + Database Demo |
+| 第6周 | 综合实战与评测 | 前述资料按需查阅 | Neon × ContextDB Agent、评测报告 |
+
+每周建议安排：
+
+- 2小时阅读或视频课程。
+- 3～4小时动手实验。
+- 30分钟内部分享。
+- 30分钟代码和方案评审。
+
+如果团队时间有限，优先保证“Pi最小内核、DSH Hook、Deep Agents Subagent、Codex MCP/Skill、ContextDB Memory、Neon综合Demo”六个实践，不要求把所有材料读完。
+
+---
+
+## 20. 课程安排建议
 
 ### 第一阶段：建立 Agent 全局认识
 
@@ -734,7 +917,7 @@ flowchart LR
 
 ---
 
-## 20. 每次专题分享模板
+## 21. 每次专题分享模板
 
 每次分享建议控制在20～30分钟：
 
@@ -755,7 +938,7 @@ flowchart LR
 
 ---
 
-## 21. 团队分工建议
+## 22. 团队分工建议
 
 | 课程组 | 负责内容 |
 |---|---|
@@ -779,7 +962,7 @@ flowchart LR
 
 ---
 
-## 22. 最终交付物
+## 23. 最终交付物
 
 1. Agent 整体架构图和术语表。
 2. 一套完整、详略得当的 Agent 开发课程。
@@ -792,7 +975,7 @@ flowchart LR
 9. NoSQL、缓存、存储等其他方向的机会观察清单。
 10. 值得继续验证的 POC 建议。
 
-## 23. 向领导汇报的建议表述
+## 24. 向领导汇报的建议表述
 
 > 我计划以“Agent开发实战”为主线，先建立完整的 Agent 机制图，再把 Agent Loop、Planning、Tool、MCP、Skill、Hook、Session、Memory、多 Agent、安全和评测等内容拆成专题，由团队成员分头学习和动手验证。课程会选择四种不同风格的 Agent Harness 进行对照：用 Pi 看懂最小内核，用 DSH 理解插件化和生命周期扩展，用 Deep Agents 学习 Planning、Subagent 和持久状态，用 Codex 观察 Sandbox、Approval、Skill、MCP 等生产级完整形态。每个专题都需要有原理、真实实现和可运行 Demo。实践上会结合我们正在做的 Neon、ContextDB，最终完成一个数据库研发 Agent，把各模块串起来。在学习过程中，我们也会观察 Agent 对数据库、缓存和存储提出的新需求；Neon、ContextDB 是优先结合方向，但如果发现其他有价值的机会，也会记录并提出验证方案。这样既能让团队真正搞清楚 Agent 机制，也能把学习结果转化为项目能力和新的机会判断。
 
