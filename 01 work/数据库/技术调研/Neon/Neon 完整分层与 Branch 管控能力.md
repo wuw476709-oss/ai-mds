@@ -319,7 +319,7 @@ WAL:                       0/1500000 -------- 0/1700000
 | 能力 | Neon Cloud | Lakebase Autoscaling | 开源 `neon_local` / Storage Controller |
 |---|---|---|---|
 | Project 创建、查询、删除 | 是，产品 REST/CLI | 是，`/api/2.0/postgres/projects` REST/CLI/SDK | 否；只有 tenant，不存在 Project 产品对象 |
-| Branch 创建/查询/列表 | 是，产品 REST/CLI | 是，Branch REST/CLI/SDK | 部分；CLI 创建/列表的是 timeline，名称映射在 `.neon/config` |
+| Branch 创建/查询/列表 | 是，产品 REST/CLI | 是，Branch REST/CLI/SDK | 是（本地命名分支）；`neon_local` 创建 timeline 并维护 branch name 映射，支持按名称解析和带名称的列表展示；Storage Controller 只处理 timeline |
 | 从默认父分支当前状态创建 | 是 | 是 | 是，`neon_local timeline branch`，默认祖先名为 `main` |
 | 指定父分支创建 | 是，`parent_id` | 是，`spec.source_branch` | 是，`--ancestor-branch-name` |
 | 从子分支再创建子分支 | 是 | 是 | 是，已实际验证两级祖先关系 |
@@ -347,6 +347,18 @@ WAL:                       0/1500000 -------- 0/1700000
 - Lakebase [Branch API reference](https://docs.databricks.com/api/postgres/v1/branch)、[Lakebase API guide](https://docs.databricks.com/aws/en/oltp/projects/api-usage) 和 [Manage branches](https://docs.databricks.com/aws/en/oltp/projects/manage-branches)。
 
 Lakebase 文档目前有一处需要谨慎处理：Branch API 的 Update 方法摘要称可设置 default，但公开请求 schema 没有可写的 default 字段；管理指南同时明确写着“设置默认分支不支持 API”。因此表中按可执行的公开契约标为 `UI`，不把摘要文字当成可用 REST 字段。
+
+#### `neon_local` 已实现的 branch name 映射
+
+`neon_local` 实际承担本地命名分支的管控职责。CLI 使用 `timeline` 命令组，不影响它在本地实现 branch name 的注册、解析、持久化和展示：
+
+- **创建并注册名称**：`timeline create/branch` 创建底层 timeline 后，调用 `register_branch_mapping` 注册新名称；成功执行后将映射持久化到 `.neon/config`。
+- **按名称定位**：`timeline branch --ancestor-branch-name main` 通过 `get_branch_timeline_id` 查找父 timeline；`endpoint create --branch-name dev` 也使用同一映射定位目标 timeline。
+- **带名称展示**：`timeline list` 查询底层 timeline 后，合并本地 `timeline_name_mappings` 展示带 branch name 的树；`endpoint list` 也展示 branch name。
+- **名称作用域**：查询键实际为 `(tenant_id, branch_name) -> timeline_id`。配置结构为 `branch_name_mappings: HashMap<String, Vec<(TenantId, TimelineId)>>`，同名 branch 可以出现在不同 tenant 中；同一 tenant 内，已有名称不能重新映射到不同 timeline。
+- **能力边界**：这些名称由 `neon_local` 管理，Storage Controller/Pageserver 仍以 ID 处理 timeline。本地名称映射尚不包含独立的产品 Branch UID、保护策略或完整的 rename/delete 生命周期管理。
+
+源码依据：[映射结构、注册与查找](https://github.com/neondatabase/neon/blob/main/control_plane/src/local_env.rs)、[CLI 创建、名称解析与列表展示](https://github.com/neondatabase/neon/blob/main/control_plane/src/bin/neon_local.rs)。本次修订依据源码核验，未重新运行 Neon 本地集成测试。
 
 ### 5.2 保护分支到底在哪里实现
 
