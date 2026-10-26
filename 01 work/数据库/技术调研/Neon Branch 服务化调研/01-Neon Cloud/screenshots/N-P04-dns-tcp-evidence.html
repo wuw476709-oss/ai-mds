@@ -1,0 +1,35 @@
+<!doctype html><meta charset="utf-8">
+<title>N-P04 / N-P05 Direct 与 Pooler DNS、TCP 验证</title>
+<style>
+body{font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:1180px;margin:38px auto;padding:0 24px;color:#162032}
+h1{font-size:28px}.meta{background:#eef8f3;border-left:5px solid #00a86b;padding:14px 18px;margin-bottom:22px}
+pre{white-space:pre-wrap;background:#111827;color:#e5e7eb;padding:20px;border-radius:8px;line-height:1.45}
+.warn{background:#fff6dc;border-left:5px solid #e7a500;padding:14px 18px}
+</style>
+<h1>N-P04 / N-P05：Direct 与 Pooler DNS、TCP 验证</h1>
+<p class="meta">执行时间：2026-10-26 10:36:50 CST<br>本机接口：en0；端口：5432</p>
+<h2>本机 DNS resolver</h2>
+<pre>114.114.114.114
+114.114.115.115
+223.5.5.5
+223.6.6.6
+180.76.76.76</pre>
+<h2>原始查询结果</h2>
+<pre>$ dig +noall +answer A ep-flat-frog-b57iab15-pooler.c-7.us-east-2.aws.neon.tech
+ep-flat-frog-b57iab15-pooler.c-7.us-east-2.aws.neon.tech. 1 IN A 198.18.0.18
+
+$ dig +noall +answer AAAA ep-flat-frog-b57iab15-pooler.c-7.us-east-2.aws.neon.tech
+(no AAAA answer)
+
+$ dig +noall +answer A ep-flat-frog-b57iab15.c-7.us-east-2.aws.neon.tech
+ep-flat-frog-b57iab15.c-7.us-east-2.aws.neon.tech. 1 IN A 198.18.0.19
+
+$ dig +noall +answer AAAA ep-flat-frog-b57iab15.c-7.us-east-2.aws.neon.tech
+(no AAAA answer)
+
+$ nc -vz -w 5 ep-flat-frog-b57iab15-pooler.c-7.us-east-2.aws.neon.tech 5432
+Connection ... port 5432 [tcp/postgresql] succeeded!
+
+$ nc -vz -w 5 ep-flat-frog-b57iab15.c-7.us-east-2.aws.neon.tech 5432
+Connection ... port 5432 [tcp/postgresql] succeeded!</pre>
+<p class="warn">198.18.0.0/15 属基准测试保留网段，本机结果与 psql 实际连接时观察到的公网地址不同，说明当前网络/DNS 层存在代理或 Fake-IP 行为。该地址不能当作 Neon 公网入口地址。</p>

@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>Neon 与 Lakebase Branch 实测对比</title>
+<style>
+body{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:1250px;margin:36px auto;padding:0 24px;color:#172033}
+h1{font-size:28px}.meta{background:#eef8f3;border-left:5px solid #00a86b;padding:14px 18px}table{width:100%;border-collapse:collapse;margin-top:22px}
+th,td{border:1px solid #ccd5df;padding:11px 12px;text-align:left;vertical-align:top}th{background:#172033;color:white}.ok{color:#087f5b;font-weight:700}.partial{color:#b46900;font-weight:700}.pending{color:#a61b1b;font-weight:700}
+</style>
+<h1>N-P15：Neon 与 Databricks Lakebase Branch 实测对比</h1>
+<p class="meta">对比日期：2026-10-26。只比较证据包中实际执行过的场景；“待验证”不等于“不支持”。</p>
+<table><thead><tr><th>能力</th><th>Neon 本轮证据</th><th>Lakebase 证据包</th><th>当前结论</th></tr></thead><tbody>
+<tr><td>Branch 创建/继承</td><td class="ok">通过：production → dev，数据继承</td><td class="ok">通过：显式 source branch、UID、来源 LSN/时间</td><td>两者均通过；Lakebase API 元数据证据更完整</td></tr>
+<tr><td>DML/DDL 隔离</td><td class="partial">DML 通过；DDL 未单独补测</td><td class="ok">DML、DDL 均通过</td><td>Neon 仍需补 DDL 证据</td></tr>
+<tr><td>Reset</td><td class="ok">通过：dev 恢复父分支当前数据</td><td class="ok">通过：数据/角色替换、连接中断、地址不变</td><td>两者核心行为一致</td></tr>
+<tr><td>PITR/历史分支</td><td class="pending">待验证</td><td class="ok">通过：cutoff 前可见、之后不可见</td><td>不能据此判断 Neon 不支持</td></tr>
+<tr><td>TTL</td><td class="pending">待验证</td><td class="ok">通过：1d → no_expiry → 2d，UID 不变</td><td>Lakebase 已有闭环证据</td></tr>
+<tr><td>保护/删除约束</td><td class="pending">待验证</td><td class="partial">TTL 冲突通过；成功保护受套餐配额阻塞</td><td>两边都未完成全部成功/拒绝路径</td></tr>
+<tr><td>Read Replica</td><td class="pending">待验证</td><td class="ok">通过：READ_ONLY、SQLSTATE 25006、追 WAL、独立删除</td><td>Lakebase 已完成闭环</td></tr>
+<tr><td>Compute 休眠/唤醒</td><td class="partial">观察到 Idle→Active；未重复 3 次计时</td><td class="ok">60s 休眠；约 4.19s 唤醒</td><td>Neon 仍需量化重复测试</td></tr>
+<tr><td>API/CLI 自动化</td><td class="pending">无 API Token，待验证</td><td class="ok">创建、更新、冲突、删除/Purge、LRO/TraceId 均实测</td><td>Lakebase 自动化证据更完整</td></tr>
+<tr><td>Endpoint / Direct / Pooler</td><td class="ok">Direct 与 Pooler 均完成 TLS、认证、TCP、SQL</td><td class="ok">Endpoint UID、Host、Direct/Pooler、CU/休眠可见</td><td>两者都显式区分 Branch 与 Compute/Endpoint</td></tr>
+<tr><td>DNS</td><td class="partial">已对照；本机受 Fake-IP 代理影响</td><td class="partial">证据包重点在管控/Endpoint，非公网 DNS 物理拓扑</td><td>DNS 结果都不应直接推断物理集群</td></tr>
+</tbody></table>
