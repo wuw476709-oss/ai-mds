@@ -140,6 +140,86 @@ digest summary 还另外分配 1000 条 query sample：
 
 ## 源码路径与理论公式
 
+### 为什么内存计算是乘积
+
+这些参数分别控制两个不同维度：
+
+```text
+记录数量 × 每条记录预留的缓冲区长度
+```
+
+Performance Schema 为减少采集路径上的动态内存操作，会提前创建固定长度数组。以 statement digest 为例，每条 digest 记录都对应：
+
+```text
+1 个 PFS_statements_digest_stat 结构体
+1 个 performance_schema_max_digest_length 字节的 digest token 缓冲区
+1 个 performance_schema_max_sql_text_length 字节的 SQL sample 缓冲区
+```
+
+因此 digest 模块的主要内存公式是：
+
+```text
+performance_schema_digests_size
+× (sizeof(PFS_statements_digest_stat)
+   + performance_schema_max_digest_length
+   + performance_schema_max_sql_text_length)
+```
+
+例如：
+
+```ini
+performance_schema_digests_size=10000
+performance_schema_max_digest_length=1024
+performance_schema_max_sql_text_length=1024
+```
+
+当前构建中 `sizeof(PFS_statements_digest_stat)=4224`，所以：
+
+```text
+10000 × (4224 + 1024 + 1024)
+= 62,720,000 bytes
+≈ 59.81 MiB
+```
+
+即使某些 digest 槽位还没有保存真实 SQL，相应数组空间也已经在启动阶段创建。这样设计主要是为了：
+
+- 避免执行 SQL 和采集性能数据时频繁调用 `malloc/free`；
+- 保证数组元素和内部缓冲区地址稳定；
+- 简化并发、原子状态和无锁查找；
+- 减少运行期内存碎片和不可预测延迟。
+
+代价是配置值表达的不只是“允许保存多长”，还可能直接成为每条预留记录的物理步长。数量和长度同时增大时，内存不是相加，而是相乘放大。
+
+长度参数还会被 statement current/history 的其他维度再次相乘。例如每线程缓冲区是：
+
+```text
+线程页包含的线程数
+× 每线程 statement 槽位数
+× 每槽最大长度
+```
+
+当前线程容器每页有 256 个线程，默认 statement stack 为 10。仅 current SQL text 在长度为 1 MiB 时就是：
+
+```text
+256 × 10 × 1 MiB = 2.5 GiB
+```
+
+这还没有包含 per-thread history、history-long 和 digest summary。
+
+`performance_schema_max_table_instances` 看起来也满足：
+
+```text
+table instance 上限 × sizeof(PFS_table_share)
+```
+
+但其容器采用分页延迟分配。设置最大值只确定可增长上限；实际 table share 出现时才按 4096 个对象一页分配。因此它的完整容量仍是乘积，启动期实际内存却只取决于已经创建的页数：
+
+```text
+已分配页数 × 4096 × sizeof(PFS_table_share)
+```
+
+这正是 `max_table_instances` 最大值没有造成启动 RSS 激增，而另外三个参数会立即或在首个线程页创建时产生大额分配的根本区别。
+
 ### 参数上限
 
 四个参数的上限都为 `1024 * 1024`：
