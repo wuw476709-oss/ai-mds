@@ -16,11 +16,11 @@ updated: 2026-10-26
 
 ## AI 与查询优化
 
-- [[AI查询优化器/云数据库厂商 AI 查询优化器进展调研（2026-07）|云数据库厂商 AI 查询优化器进展调研（2026-07）]]
+- [[ai-query-optimizer/云数据库厂商 AI 查询优化器进展调研（2026-07）|云数据库厂商 AI 查询优化器进展调研（2026-07）]]
 
 ## Serverless PostgreSQL 与 Branch
 
-- [[../技术调研/Neon Branch 服务化调研/00-总览与索引|Neon Branch 服务化调研]]：统一收录 Neon Cloud、Lakebase 和 Neon Local 的测试、实现分析及服务化设计。
+- [[../research/neon-branch/00-总览与索引|Neon Branch 服务化调研]]：统一收录 Neon Cloud、Lakebase 和 Neon Local 的测试、实现分析及服务化设计。
 
 ## 目录约定
 

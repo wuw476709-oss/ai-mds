@@ -17,23 +17,23 @@
 
 ## 建议阅读顺序
 
-1. [[文档/aws-rds-mysql-8.0.45-empirical-test-report|AWS RDS MySQL 8.0.45 最终实测报告]]
-2. [[文档/aws-rds-mysql-session-kill-exploratory-test-plan|测试大纲与用例设计]]
-3. [[文档/aws-rds-mysql-session-kill-boundary-addendum|保留账号与授权链边界补充]]
-4. [[文档/初始核心测试报告|初始核心测试报告]]
-5. [[文档/初始授权链与保留账号补测报告|初始授权链与保留账号补测报告]]
+1. [[docs/aws-rds-mysql-8.0.45-empirical-test-report|AWS RDS MySQL 8.0.45 最终实测报告]]
+2. [[docs/aws-rds-mysql-session-kill-exploratory-test-plan|测试大纲与用例设计]]
+3. [[docs/aws-rds-mysql-session-kill-boundary-addendum|保留账号与授权链边界补充]]
+4. [[docs/初始核心测试报告|初始核心测试报告]]
+5. [[docs/初始授权链与保留账号补测报告|初始授权链与保留账号补测报告]]
 
 ## 有效运行索引
 
 | 阶段 | 结果目录 | 内容 |
 |---|---|---|
-| 初始核心测试 | `原始结果/20261014T070919Z-core` | 基础权限、QUERY/SESSION、初始参数与撤权 |
-| 初始边界补测 | `原始结果/20261014T080200Z-grant-reserved-boundaries` | 全局 EXECUTE、GRANT OPTION、保留账号只读采集 |
-| 完整授权作用域 | `原始结果/20261014T082933Z-grant-scope-matrix` | 全局、mysql.*、过程级授权与多级链 |
-| 角色授权链 | `原始结果/20261014T084157Z-role-delegation` | ADMIN OPTION、多级角色转授、上游撤权 |
-| 深度语义 | `原始结果/20261014T084300Z-deep-semantics` | 持久连接、self-kill、事务锁、目标矩阵、竞态、参数 |
-| rdsadmin query 保护 | `原始结果/20261014T085351Z-reserved-query` | 对真实空闲 rdsadmin 执行 rds_kill_query |
-| rdsadmin session 保护 | `原始结果/20261014T085820Z-reserved-session` | 对真实空闲 rdsadmin 执行 rds_kill |
+| 初始核心测试 | `raw-results/20261014T070919Z-core` | 基础权限、QUERY/SESSION、初始参数与撤权 |
+| 初始边界补测 | `raw-results/20261014T080200Z-grant-reserved-boundaries` | 全局 EXECUTE、GRANT OPTION、保留账号只读采集 |
+| 完整授权作用域 | `raw-results/20261014T082933Z-grant-scope-matrix` | 全局、mysql.*、过程级授权与多级链 |
+| 角色授权链 | `raw-results/20261014T084157Z-role-delegation` | ADMIN OPTION、多级角色转授、上游撤权 |
+| 深度语义 | `raw-results/20261014T084300Z-deep-semantics` | 持久连接、self-kill、事务锁、目标矩阵、竞态、参数 |
+| rdsadmin query 保护 | `raw-results/20261014T085351Z-reserved-query` | 对真实空闲 rdsadmin 执行 rds_kill_query |
+| rdsadmin session 保护 | `raw-results/20261014T085820Z-reserved-session` | 对真实空闲 rdsadmin 执行 rds_kill |
 
 每个结果目录中的 `raw-mysql/` 包含：
 

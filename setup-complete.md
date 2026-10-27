@@ -12,7 +12,7 @@
 - `sync-to-git.sh` - 自动同步脚本
 - `README.md` - 使用说明
 - `SETUP.md` - 详细配置指南
-- `测试文件.md` - 示例文件
+- `test.md` - 示例文件
 
 ## 下一步
 

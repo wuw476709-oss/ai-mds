@@ -65,7 +65,7 @@ git remote set-url origin https://YOUR_TOKEN@github.com/wuw476709-oss/ai-mds.git
 ├── .git/                    # Git 仓库配置
 ├── README.md               # 使用说明
 ├── sync-to-git.sh          # 同步脚本
-└── 测试文件.md             # 示例文件
+└── test.md             # 示例文件
 ```
 
 ## 使用方法

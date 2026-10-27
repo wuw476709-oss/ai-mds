@@ -36,7 +36,7 @@
 | N-09 | 子分支写入不影响父分支 | 通过（用户确认） | production 仍为原始 3 行 |
 | N-10 | 父分支新增 id=5 | 通过（用户确认） | production 新增 `production-new-row` |
 | N-11 | 父分支新写入不自动同步子分支 | 通过（用户确认） | dev 未出现 id=5 |
-| N-12 | Reset 确认弹窗 | 已截图 | 警告涉及数据库/角色替换、连接中断、连接串不变及过期时间延长 |
+| N-12 | Reset 确认弹窗 | 已截图 | 警告涉及database/角色替换、连接中断、连接串不变及过期时间延长 |
 | N-13 | Reset 后验证 | 通过（截图） | dev 变为 id=1,2,3,5；id=1 恢复，id=4 消失，id=5 出现 |
 | N-14 | 本机 psql 连接 | **通过（截图）** | Homebrew `libpq` 的 `psql` 认证成功；TLS 1.3；身份及基准数据查询成功 |
 | N-15 | Direct 与 Pooler DNS/TCP 对比 | **通过（截图，含网络侧限制）** | 两种模式均可连接 5432；本机 DNS 返回 Fake-IP，另以 `psql` 连接信息记录实际公网地址 |
@@ -90,7 +90,7 @@ Branch 列表截图显示 production 和 dev 的 Compute 均为 Idle。对 dev �
 ## 7. 后续待验证清单（Codex）
 | 优先级 | ID | 任务 | 验收标准 |
 |---|---|---|---|
-| P0 | N-P01 | 轮换已暴露的数据库密码；建立安全凭据注入方式 | 不在脚本/日志/报告中保存明文密码 |
+| P0 | N-P01 | 轮换已暴露的数据库密码；建立安全凭据注入方式 | 不在scripts/日志/报告中保存明文密码 |
 | P0 | N-P02 | 本机连接：网络、TLS、认证、SQL | 逐层记录错误或成功结果并截图 |
 | P1 | N-P03 | 补齐 Project、Branch 列表、dev 详情、基准 SQL 截图 | 截图有上下文、凭据打码 |
 | P1 | N-P04 | 从 Console 复制同一 endpoint 的 Direct 和 Pooler host，分别 nslookup | 保存原始命令、时间、resolver、A/AAAA 结果；不猜 hostname |

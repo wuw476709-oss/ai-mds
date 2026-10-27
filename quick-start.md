@@ -46,7 +46,7 @@ git-sync/
 ├── sync-to-git.sh     # 同步脚本
 ├── README.md          # 详细说明
 ├── SETUP.md           # 配置指南
-├── 配置完成.md        # 配置摘要
+├── setup-complete.md        # 配置摘要
 └── *.md              # 你的 Markdown 文件
 ```
 

@@ -18,7 +18,7 @@ updated: 2026-10-26
 ## 01 Neon Cloud
 
 - [[01-Neon Cloud/Neon Cloud Branch 阶段测试报告|Neon Cloud Branch 阶段测试报告]]
-- `Neon Cloud Branch 阶段测试报告_附截图.docx`：便于独立分发的 Word 版本。
+- `neon-cloud-branch-test.docx`：便于独立分发的 Word 版本。
 - `screenshots/`：报告引用的控制台、连接及验证截图。
 
 ## 02 Lakebase

@@ -476,7 +476,7 @@ GET    /v1/operations/{operation}
 
 ## 10. 参考
 
-- 完整实测证据：`Lakebase_Branch_测试报告_含全部截图.md`
+- 完整实测证据：`lakebase-branch-test.md`
 - Databricks Branch 概念：<https://docs.databricks.com/aws/en/oltp/projects/branches>
 - Databricks Branch 管理：<https://docs.databricks.com/aws/en/oltp/projects/manage-branches>
 - Databricks PITR Branch：<https://docs.databricks.com/aws/en/oltp/projects/point-in-time-branching>

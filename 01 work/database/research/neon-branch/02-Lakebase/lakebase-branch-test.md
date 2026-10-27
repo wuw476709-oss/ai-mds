@@ -26,7 +26,7 @@
 | UI-03 | DML 隔离 | 通过 | `dev` 更新 Alice=999、删除 Bob、插入 David；`production` 保持原三行 |
 | UI-04 | DDL 隔离 | 通过 | `dev` 新增 `remark` 列及 `idx_orders_amount` 索引，父分支不变 |
 | UI-05 | Schema Diff | 通过 | 控制台展示列和索引的具体差异 |
-| UI-06 | Reset from parent | 通过 | 重置后数据与父分支一致；UI 警告替换数据库/角色、中断连接，连接串不变 |
+| UI-06 | Reset from parent | 通过 | 重置后数据与父分支一致；UI 警告替换database/角色、中断连接，连接串不变 |
 | UI-07 | 保护分支 | 通过（界面规则） | `production` 设为 protected；界面说明不可删除/归档/重置，相关 Compute 不能删除 |
 | UI-08 | TTL 与保护约束 | 通过 | 有过期时间的分支不能保护；取消 TTL 后还受保护分支配额限制 |
 | UI-09 | 多级分支 | 通过 | `dev-child` 来源 `dev`，继承当时数据及 Schema/索引 |
@@ -175,9 +175,9 @@ databricks postgres get-endpoint \
 
 界面证据：
 
-![P01 重建后的 Branch UID 与 Primary 2–4 CU](screenshots/081_P01_api-test_重建后_Endpoint默认配置.png)
+![P01 重建后的 Branch UID 与 Primary 2–4 CU](screenshots/081_p01_endpoint-defaults.png)
 
-![P01 新 Endpoint UID、2–4 CU 与 1 Day 休眠](screenshots/082_P01_Endpoint_UID与2-4CU_1天休眠.png)
+![P01 新 Endpoint UID、2–4 CU 与 1 Day 休眠](screenshots/082_p01_uid-cu-suspend.png)
 
 ### 5.2 P02 — 显式指定源 Branch（已完成）
 
@@ -284,17 +284,17 @@ Schema 对照结果（两个 Branch 一致）：
 
 界面证据：
 
-![P02 codex-source-test 来源 dev、UID 与 Compute](screenshots/083_P02_codex-source-test_来源dev.png)
+![P02 codex-source-test 来源 dev、UID 与 Compute](screenshots/083_p02_source-dev.png)
 
-![P02 codex-source-test 数据快照](screenshots/084_P02_codex-source-test_数据快照.png)
+![P02 codex-source-test 数据快照](screenshots/084_p02_data-snapshot.png)
 
-![P02 codex-source-test Schema 快照](screenshots/085_P02_codex-source-test_Schema快照.png)
+![P02 codex-source-test Schema 快照](screenshots/085_p02_schema-snapshot.png)
 
-![P02 dev 数据对照](screenshots/086_P02_dev_数据对照.png)
+![P02 dev 数据对照](screenshots/086_p02_dev-data.png)
 
-![P02 dev Schema 对照](screenshots/087_P02_dev_Schema对照.png)
+![P02 dev Schema 对照](screenshots/087_p02_dev-schema.png)
 
-![P02 dev 与 codex-source-test Schema 无差异](screenshots/088_P02_dev与codex-source-test_Schema无差异.png)
+![P02 dev 与 codex-source-test Schema 无差异](screenshots/088_p02_schema-diff.png)
 
 ### 5.3 P03 — 历史时间点分支 PITR（已完成）
 
@@ -329,7 +329,7 @@ databricks postgres create-branch projects/branch2 codex-pitr-test \
 
 结论：cutoff 之前的 `before` 可见，之后的 `after` 不可见，PITR 数据边界验证通过。
 
-![P03 PITR 验证结果](screenshots/089_P03_PITR验证结果.png)
+![P03 PITR 验证结果](screenshots/089_p03_pitr.png)
 
 ### 5.4 P04 — Branch TTL 更新（已完成）
 
@@ -346,7 +346,7 @@ databricks postgres update-branch \
 - 清理子分支后，`codex-source-test` 从 `no_expiry` 更新为 2 天 TTL，UID 仍为 `br-noisy-glade-d1f8lias`，过期时间为 `2026-10-26T09:07:38Z`。
 - 有 TTL 的 Branch 不能创建子 Branch；该限制由 P03 首次失败直接验证。
 
-![P04 TTL 更新结果](screenshots/090_P04_TTL更新结果.png)
+![P04 TTL 更新结果](screenshots/090_p04_ttl-update.png)
 
 ### 5.5 P05 — Branch 保护 API（部分通过）
 
@@ -366,7 +366,7 @@ TraceId: 309fd37194493fcfd990d7f23ef13cb6
 
 结论：TTL 冲突与套餐配额拒绝路径通过；由于 `production` 已占用当前套餐唯一 protected Branch 配额，且安全边界禁止修改它，因此本轮不能验证“成功保护→删除拒绝→取消保护”。未修改任何现有 Branch。
 
-![P05 保护 API 约束结果](screenshots/091_P05_保护API约束结果.png)
+![P05 保护 API 约束结果](screenshots/091_p05_api-guard.png)
 
 ### 5.6 P06 — Endpoint 独立删除（已完成）
 
@@ -385,7 +385,7 @@ databricks postgres create-endpoint \
 - 删除 Replica 的 Operation `done=true`，返回 `google.protobuf.Empty`。
 - 删除后仅剩 Primary `ep-rough-wildflower-d1btx6ek`，状态 ACTIVE。
 
-![P06 Replica 独立删除结果](screenshots/092_P06_Replica独立删除结果.png)
+![P06 Replica 独立删除结果](screenshots/092_p06_replica-delete.png)
 
 ### 5.7 P07 — 自动休眠与唤醒（已完成）
 
@@ -397,7 +397,7 @@ databricks postgres create-endpoint \
 
 端到端命令耗时 `4.19s`，再次查询 Endpoint 状态为 ACTIVE，`update_time=2026-10-24T09:05:55Z`。结论：自动休眠、首次连接唤醒及连接恢复均实测通过。
 
-![P07 自动休眠与唤醒结果](screenshots/093_P07_自动休眠唤醒结果.png)
+![P07 自动休眠与唤醒结果](screenshots/093_p07_auto-wake.png)
 
 ### 5.8 P08 — 错误、并发与任务超时（已完成）
 
@@ -412,7 +412,7 @@ TraceId: d82ab5bc49ddfba0deb0060d69d22454
 
 结论：同名竞争没有产生重复资源；客户端超时不能直接视作服务端失败，必须用 Operation 或资源 GET 做最终确认。
 
-![P08 并发、超时与错误结果](screenshots/094_P08_并发超时错误结果.png)
+![P08 并发、超时与错误结果](screenshots/094_p08_timeout.png)
 
 ### 5.9 P09 — 测试资源清理（已完成）
 
@@ -429,7 +429,7 @@ TraceId: d82ab5bc49ddfba0deb0060d69d22454
 
 最终 `codex-*` 数量为 0，原有四个 Branch 全部保留。
 
-![P09 临时资源清理结果](screenshots/095_P09_临时资源清理结果.png)
+![P09 临时资源清理结果](screenshots/095_p09_cleanup.png)
 
 ### 5.10 P10 — 最终报告（已完成）
 
@@ -496,7 +496,7 @@ TraceId: 4dda05ce59f9273e413f75d0907730f5
 
 结论：过旧 LSN 在创建前被服务端拒绝；LSN 与 timestamp 是互斥的两种分叉点表达。
 
-![P11 Timeline/LSN 边界验证](screenshots/096_P11_Timeline_LSN边界验证.png)
+![P11 Timeline/LSN 边界验证](screenshots/096_p11_lsn-boundary.png)
 
 清理结果：`codex-lsn-exact`、`codex-lsn-committed`、`codex-lsn-latest` 和 `codex-lsn-source` 均已按子到父顺序 Purge。最终 `codex-lsn-*` 数量为 0；原有四个 Branch 全部 READY。
 
@@ -860,65 +860,65 @@ TraceId: 4dda05ce59f9273e413f75d0907730f5
 
 ### 证据 E081 — P01 api-test 重建后 Endpoint 默认配置
 
-![证据 E081](screenshots/081_P01_api-test_重建后_Endpoint默认配置.png)
+![证据 E081](screenshots/081_p01_endpoint-defaults.png)
 
 ### 证据 E082 — P01 Endpoint UID、2–4 CU 与 1 天休眠
 
-![证据 E082](screenshots/082_P01_Endpoint_UID与2-4CU_1天休眠.png)
+![证据 E082](screenshots/082_p01_uid-cu-suspend.png)
 
 ### 证据 E083 — P02 codex-source-test 来源 dev
 
-![证据 E083](screenshots/083_P02_codex-source-test_来源dev.png)
+![证据 E083](screenshots/083_p02_source-dev.png)
 
 ### 证据 E084 — P02 codex-source-test 数据快照
 
-![证据 E084](screenshots/084_P02_codex-source-test_数据快照.png)
+![证据 E084](screenshots/084_p02_data-snapshot.png)
 
 ### 证据 E085 — P02 codex-source-test Schema 快照
 
-![证据 E085](screenshots/085_P02_codex-source-test_Schema快照.png)
+![证据 E085](screenshots/085_p02_schema-snapshot.png)
 
 ### 证据 E086 — P02 dev 数据对照
 
-![证据 E086](screenshots/086_P02_dev_数据对照.png)
+![证据 E086](screenshots/086_p02_dev-data.png)
 
 ### 证据 E087 — P02 dev Schema 对照
 
-![证据 E087](screenshots/087_P02_dev_Schema对照.png)
+![证据 E087](screenshots/087_p02_dev-schema.png)
 
 ### 证据 E088 — P02 dev 与 codex-source-test Schema 无差异
 
-![证据 E088](screenshots/088_P02_dev与codex-source-test_Schema无差异.png)
+![证据 E088](screenshots/088_p02_schema-diff.png)
 
 ### 证据 E089 — P03 PITR 验证结果
 
-![证据 E089](screenshots/089_P03_PITR验证结果.png)
+![证据 E089](screenshots/089_p03_pitr.png)
 
 ### 证据 E090 — P04 TTL 更新结果
 
-![证据 E090](screenshots/090_P04_TTL更新结果.png)
+![证据 E090](screenshots/090_p04_ttl-update.png)
 
 ### 证据 E091 — P05 保护 API 约束结果
 
-![证据 E091](screenshots/091_P05_保护API约束结果.png)
+![证据 E091](screenshots/091_p05_api-guard.png)
 
 ### 证据 E092 — P06 Replica 独立删除结果
 
-![证据 E092](screenshots/092_P06_Replica独立删除结果.png)
+![证据 E092](screenshots/092_p06_replica-delete.png)
 
 ### 证据 E093 — P07 自动休眠与唤醒结果
 
-![证据 E093](screenshots/093_P07_自动休眠唤醒结果.png)
+![证据 E093](screenshots/093_p07_auto-wake.png)
 
 ### 证据 E094 — P08 并发、超时与错误结果
 
-![证据 E094](screenshots/094_P08_并发超时错误结果.png)
+![证据 E094](screenshots/094_p08_timeout.png)
 
 ### 证据 E095 — P09 临时资源清理结果
 
-![证据 E095](screenshots/095_P09_临时资源清理结果.png)
+![证据 E095](screenshots/095_p09_cleanup.png)
 
 ### 证据 E096 — P11 Timeline/LSN 边界验证
 
-![证据 E096](screenshots/096_P11_Timeline_LSN边界验证.png)
+![证据 E096](screenshots/096_p11_lsn-boundary.png)
 
