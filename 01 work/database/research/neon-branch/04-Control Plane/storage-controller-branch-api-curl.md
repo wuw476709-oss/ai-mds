@@ -113,15 +113,25 @@ jq '{timeline_id, ancestor_timeline_id, ancestor_lsn,
 
 ## 6. Branch 删除与高级命令表
 
-| 功能 | 方法与路径 | `curl` 命令 | 说明 |
+| 功能 | 人话解释与使用场景 | `curl` 命令 | 关键影响与注意事项 |
 |---|---|---|---|
-| 删除 Timeline | `DELETE /v1/tenant/{tenant_id}/timeline/{timeline_id}` | `curl --fail-with-body -i -X DELETE "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}"` | 完成返回 `200`；超时可能返回 `409`，稍后重试 |
-| Archive | `PUT .../archival_config` | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/archival_config" -H "Content-Type: application/json" -d '{"state":"Archived"}'` | Archive 不是保护 Branch |
-| Unarchive | 同上 | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/archival_config" -H "Content-Type: application/json" -d '{"state":"Unarchived"}'` | 恢复 Timeline |
-| Detach 并重挂子 Timeline | `PUT .../detach_ancestor` | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/detach_ancestor?detach_behavior=no_ancestor_and_reparent"` | 高风险、不可简单撤销 |
-| Detach 多层祖先且不重挂 | 同上 | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/detach_ancestor?detach_behavior=multi_level_and_no_reparent"` | 改变真实祖先依赖 |
-| Block GC | `POST .../block_gc` | `curl --fail-with-body -sS -X POST "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/block_gc"` | 内部运维接口 |
-| Unblock GC | `POST .../unblock_gc` | `curl --fail-with-body -sS -X POST "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/unblock_gc"` | 恢复 GC |
+| 删除 Timeline | **把这个 Branch 对应的底层 Timeline 数据真正删掉**，不是只删 Branch 名称。用于确定不再需要该 Branch 时。 | `curl --fail-with-body -i -X DELETE "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}"` | 应先停掉或迁走 Compute，并检查默认分支、保护策略和子分支。完成返回 `200`；处理未完成可能返回 `409`，稍后重试。删除通常不可恢复。 |
+| Archive（归档） | **把长期不用、但暂时不想删除的 Branch 标为冷数据。** Pageserver 不再把它当作正常活跃 Timeline 管理，后续可将数据 offload 到远端存储并释放本地缓存。 | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/archival_config" -H "Content-Type: application/json" -d '{"state":"Archived"}'` | 归档只是改变生命周期状态，不等于删除、保护分支或制作一份完整备份。一般不能直接供活跃 Compute 使用；存在活跃后代 Timeline 时还会受到祖先/后代状态约束。 |
+| Unarchive（取消归档） | **把冷藏的 Branch 重新激活**，让 Timeline 回到可以正常加载和使用的状态。用于重新启用历史 Branch。 | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/archival_config" -H "Content-Type: application/json" -d '{"state":"Unarchived"}'` | 如果数据已经 offload，重新启用时可能要从远端下载，首次访问会比较慢。它不是 PITR 恢复；归档祖先与后代之间还要满足状态约束。 |
+| Detach 并重挂子 Timeline | **让目标 Timeline 不再依赖原祖先，同时自动调整相关子 Timeline 的祖先关系。** 常见目的，是保留后代 Branch，但为删除或清理旧祖先创造条件。 | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/detach_ancestor?detach_behavior=no_ancestor_and_reparent"` | 会物化目标 Timeline 所依赖的历史并改写存储层祖先关系，可能耗时、占空间，而且不能简单撤销；该模式只适用于接口要求的祖先拓扑。不是 Branch reset。 |
+| Detach 多层祖先且不重挂 | **一次切断目标 Timeline 对多层祖先的依赖，但不替其他子 Timeline 自动改父关系。** 主要用于特殊迁移或存储拓扑修复。 | `curl --fail-with-body -sS -X PUT "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/detach_ancestor?detach_behavior=multi_level_and_no_reparent"` | 比普通 Detach 更容易影响既有分支树，应只由理解 Timeline 拓扑的运维程序使用。它改变的是底层祖先依赖，不是修改产品层 Branch 名称。 |
+| Block GC（暂停历史回收） | **临时告诉 Pageserver：先别回收这条 Timeline 的旧历史数据。** 可在维护、迁移或必须保留某段历史依赖时使用。 | `curl --fail-with-body -sS -X POST "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/block_gc"` | 只阻止 GC 清理历史，不阻止删除 Timeline，也不是“保护分支”。长期阻塞会使存储持续增长，操作完成后应及时解除。 |
+| Unblock GC（恢复历史回收） | **撤销上面的暂停，让 Pageserver 继续正常清理过旧历史。** 在维护或迁移完成后使用。 | `curl --fail-with-body -sS -X POST "${SC_URL}/v1/tenant/${TENANT_ID}/timeline/${DEV_TIMELINE_ID}/unblock_gc"` | 解除后，一旦 GC 推进，被清理的旧历史通常无法再读回；执行前要确认已没有 PITR、分支创建或祖先依赖需要这些历史。 |
+
+最容易混淆的几个概念可以这样记：
+
+| 概念 | 一句话区分 |
+|---|---|
+| Branch protection | 产品管控层的删除策略：**不允许用户误删这个 Branch**。Storage Controller 本身不保存这个产品策略。 |
+| Archive | Timeline 生命周期管理：**数据先留着，但按长期不用的冷数据处理**。 |
+| Block GC | 历史保留开关：**Timeline 还正常存在，只是暂时不回收它的旧历史**。 |
+| Detach ancestor | 存储依赖改造：**把 Timeline 对祖先历史的依赖切断或改写**。 |
+| Delete | 物理删除：**真正移除 Branch 对应的 Timeline 数据**。 |
 
 删除前，上层至少检查保护状态、默认分支、子分支和绑定 Compute；删除成功后再清理名称映射。
 
